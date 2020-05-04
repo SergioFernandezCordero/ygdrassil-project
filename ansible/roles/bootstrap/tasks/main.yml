@@ -48,6 +48,22 @@
       group: root
       mode: 0444
 
+  - name: "Disable root login"
+    become: yes
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin'
+      line: PermitRootLogin no
+    register: disableroot
+
+  - name: "Restart SSH Service if needed"
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+      enabled: yes
+    when: disableroot.changed
+
   tags:
     - bootstrap
     - master-user
@@ -68,6 +84,7 @@
       owner: root
       group: root
       mode: 0644
+    register: fail2banconf
   
   - name: "Restart and enable Fail2Ban service"
     become: yes
@@ -75,6 +92,11 @@
       name: fail2ban
       state: restarted
       enabled: yes
+    when: fail2banconf.changed
+
+  rescue:    
+    - fail:
+        msg: "Please run again without root user"
 
   tags:
     - bootstrap
