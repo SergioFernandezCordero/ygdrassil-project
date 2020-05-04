@@ -1,3 +1,4 @@
+# Master User stuff
 master_group: ygdrassil
 master_gid: 501
 master_user: ygdrassil
@@ -46,3 +47,16 @@ master_rsa_pubkey: !vault |
           36303933643038633562623430383462616439393164386662326132336164666230373366366235
           37353438376339333138653339623234346638653064363461376232663637383937
 master_email: "sergio@fernandezcordero.net"
+
+# Docker and kubernetes stuff
+docker_edition: 'ce'
+docker_package: "docker-{{ docker_edition }}"
+docker_package_state: present
+docker_service_state: started
+docker_service_enabled: true
+docker_restart_handler_state: restarted
+docker_apt_release_channel: stable
+docker_apt_arch: amd64
+docker_apt_repository: "deb [arch={{ docker_apt_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+docker_apt_ignore_key_error: True
+docker_apt_gpg_key: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
