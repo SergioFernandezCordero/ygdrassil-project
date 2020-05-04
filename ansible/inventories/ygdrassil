@@ -4,4 +4,7 @@ all:
     ygdrassil:
       hosts:
         ygdrassil.proyectopqmc.com:
+    k8-master:
+      hosts:
+        ygdrassil.proyectopqmc.com:
           kubernetes_role: master

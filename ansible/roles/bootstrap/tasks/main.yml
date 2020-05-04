@@ -12,6 +12,7 @@
     user:
       name: "{{ master_user }}"
       uid: "{{ master_uid }}"
+      group: "{{ master_group }}"
       groups:
         - "{{ master_group }}"
       home: "/home/{{ master_user }}"

@@ -14,3 +14,29 @@
   roles:
     - geerlingguy.docker
     - geerlingguy.kubernetes
+  tasks:
+    # Create link to kubernetes/admin.conf for master user usage only on master node
+    - block:
+      - name: "Change kubernetes admin.conf permissions"
+        file:
+          path: /etc/kubernetes/admin.conf
+          mode: 0644
+    
+      - name: "Create kubectl path for Master User"
+        file:
+          path: "/home/{{ master_user }}/.kube"
+          owner: "{{ master_user }}"
+          group: "{{ master_group }}"
+          mode: 0755
+          state: directory
+
+      - name: "Link kubectl config to Master User home"
+        file:
+          src: /etc/kubernetes/admin.conf
+          state: link
+          dest: "/home/{{ master_user }}/.kube/config"
+          owner: "{{ master_user }}"
+          group: "{{ master_group }}"
+          mode: 0644
+
+      when: kubernetes_role == "master"
