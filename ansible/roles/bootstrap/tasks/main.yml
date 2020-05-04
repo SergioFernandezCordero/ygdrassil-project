@@ -1,0 +1,53 @@
+---
+- block:
+  - name: "Create group for Master User"
+    become: yes
+    group:
+      name: "{{ master_group }}"
+      gid: "{{ master_gid }}"
+      state: present
+
+  - name: "Create Master User"
+    become: yes
+    user:
+      name: "{{ master_user }}"
+      uid: "{{ master_uid }}"
+      groups:
+        - "{{ master_group }}"
+      home: "/home/{{ master_user }}"
+      create_home: yes
+      password_lock: yes
+      shell: /bin/bash
+      state: present
+      comment: "Master of Ygdrassil"
+
+  - name: "Create SSH path for Master User"
+    become: yes
+    file:
+      path: "/home/{{ master_user }}/.ssh"
+      mode: 0755
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+      state: directory
+
+  - name: "Deploy RSA pubkey for Master User"
+    become: yes
+    copy:
+      content: "{{ master_rsa_pubkey }}"
+      dest: "/home/{{ master_user }}/.ssh/authorized_keys"
+      mode: 0644
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+
+  - name: "Deploy sudoers config"
+    become: yes
+    template:
+      src: templates/sudoers
+      dest: /etc/sudoers.d/99-ygdrassil-users
+      owner: root
+      group: root
+      mode: 0444
+
+  tags:
+    - bootstrap
+    - master-user
