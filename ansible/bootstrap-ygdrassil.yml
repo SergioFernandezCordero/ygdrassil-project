@@ -13,3 +13,4 @@
     - vars/ygdrassil.yml
   roles:
     - geerlingguy.docker
+    - geerlingguy.kubernetes

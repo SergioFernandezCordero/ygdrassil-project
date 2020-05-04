@@ -48,7 +48,7 @@ master_rsa_pubkey: !vault |
           37353438376339333138653339623234346638653064363461376232663637383937
 master_email: "sergio@fernandezcordero.net"
 
-# Docker and kubernetes stuff
+# Docker stuff
 docker_edition: 'ce'
 docker_package: "docker-{{ docker_edition }}"
 docker_package_state: present
@@ -60,3 +60,14 @@ docker_apt_arch: amd64
 docker_apt_repository: "deb [arch={{ docker_apt_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
 docker_apt_ignore_key_error: True
 docker_apt_gpg_key: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+
+# Kubernetes stuff
+kubernetes_apt_release_channel: main
+kubernetes_apt_repository: "deb http://apt.kubernetes.io/ kubernetes-xenial {{ kubernetes_apt_release_channel }}"
+kubernetes_apt_ignore_key_error: false
+kubernetes_pod_network:
+  cni: 'flannel'
+  cidr: '10.244.0.0/16'
+kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
+kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubernetes_allow_pods_on_master: true
