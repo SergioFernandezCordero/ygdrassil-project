@@ -51,3 +51,31 @@
   tags:
     - bootstrap
     - master-user
+
+- block:
+  - name: "Install packages"
+    become: yes
+    package:
+      name:
+        - fail2ban
+      state: present
+
+  - name: "Configure Fail2Ban SSH jail"
+    become: yes
+    template:
+      src: templates/fail2ban
+      dest: /etc/fail2ban/jail.local
+      owner: root
+      group: root
+      mode: 0644
+  
+  - name: "Restart and enable Fail2Ban service"
+    become: yes
+    service:
+      name: fail2ban
+      state: restarted
+      enabled: yes
+
+  tags:
+    - bootstrap
+    - fail2ban
