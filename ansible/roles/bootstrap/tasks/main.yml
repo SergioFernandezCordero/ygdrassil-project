@@ -43,7 +43,7 @@
   - name: "Deploy sudoers config"
     become: yes
     template:
-      src: templates/sudoers
+      src: templates/sudoers.j2
       dest: /etc/sudoers.d/99-ygdrassil-users
       owner: root
       group: root
@@ -80,7 +80,7 @@
   - name: "Configure Fail2Ban SSH jail"
     become: yes
     template:
-      src: templates/fail2ban
+      src: templates/fail2ban.j2
       dest: /etc/fail2ban/jail.local
       owner: root
       group: root
@@ -94,6 +94,15 @@
       state: restarted
       enabled: yes
     when: fail2banconf.changed
+
+  - name: Change to cool motd
+    become: yes
+    template:
+      src: templates/motd.j2
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: 0644
 
   rescue:    
     - fail:
