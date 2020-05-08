@@ -78,11 +78,19 @@
       state: present
 
   - name: Pip upgrade pip
-    become: yes
     pip:
       name:
         - pip
+        - pyasn1
       extra_args: --upgrade
+  
+  - name: Pip install stuff
+    pip:
+      name:
+        - pyhelm
+        - grpcio
+        - pyyaml
+        - openshift
   
   tags:
     - bootstrap
