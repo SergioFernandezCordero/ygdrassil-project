@@ -71,3 +71,6 @@ kubernetes_pod_network:
 kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
 kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes_allow_pods_on_master: true
+
+# Helm
+helm_version: 3.2.1

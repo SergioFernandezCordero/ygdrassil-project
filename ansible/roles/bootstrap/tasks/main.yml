@@ -111,3 +111,47 @@
   tags:
     - bootstrap
     - fail2ban
+
+- block:
+  - name: Create temp directory
+    delegate_to: 127.0.0.1
+    tempfile:
+      state: directory
+      suffix: _helm
+    register: helm_temp
+  
+  - name: "Download Helm binary in temp path {{ helm_temp.path }}"
+    delegate_to: 127.0.0.1
+    get_url:
+      url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+      dest: "{{ helm_temp.path }}"
+
+  - name: Unarchive package in temp path
+    delegate_to: 127.0.0.1
+    unarchive:
+      src: "{{ helm_temp.path }}/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+      dest: "{{ helm_temp.path }}"
+  
+  - name: Upload Helm to nodes
+    become: yes
+    copy:
+      src: "{{ helm_temp.path }}/linux-amd64/helm"
+      dest: /usr/local/bin/helm
+      owner: root
+      group: root
+      mode: 0755
+
+  rescue:
+    - fail:
+        msg: "Something went wrong"
+
+  always:
+    - name: "Remove temporal path {{ helm_temp.path }}"
+      delegate_to: 127.0.0.1
+      file:
+        path: "{{ helm_temp.path }}"
+        state: absent
+
+  tags:
+    - bootstrap
+    - helm
