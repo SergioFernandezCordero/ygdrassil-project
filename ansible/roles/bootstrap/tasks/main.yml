@@ -77,6 +77,18 @@
         - fail2ban
       state: present
 
+  - name: Pip upgrade pip
+    become: yes
+    pip:
+      name:
+        - pip
+      extra_args: --upgrade
+  
+  tags:
+    - bootstrap
+    - dependencies  
+
+- block:
   - name: "Configure Fail2Ban SSH jail"
     become: yes
     template:
@@ -140,6 +152,13 @@
       owner: root
       group: root
       mode: 0755
+
+  - name: Install kubernetes packages with Helm
+    include_tasks: helm.yml
+    tags:
+      - bootstrap
+      - helm
+      - helm-packages
 
   rescue:
     - fail:
