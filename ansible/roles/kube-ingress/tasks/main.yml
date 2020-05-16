@@ -26,7 +26,7 @@
 
   - name: Create ingress for helloworld
     k8s:
-      namespace: ingress-nginx
+      namespace: default
       state: present
       src: "{{ k8s_ingress.path }}/default-ingress.yml"
 

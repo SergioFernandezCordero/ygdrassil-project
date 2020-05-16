@@ -20,6 +20,17 @@
       namespace: default
       src: "{{ k8s_deps.path }}/ingress-nginx.yaml"
       state: present
+
+  - name: Upload custom ConfigMap
+    copy:
+      src: files/nginx-configmap.yml
+      dest: "{{ k8s_deps.path }}/nginx-configmap.yaml"
+
+  - name: Apply custom configmap
+    k8s:
+      namespace: ingress-nginx
+      src: "{{ k8s_deps.path }}/nginx-configmap.yaml"
+      state: present
   
   always:
     - name: Tempdir cleanup

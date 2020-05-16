@@ -1,0 +1,29 @@
+---
+- block:
+  - name: "Install HAproxy packages"
+    become: yes
+    package:
+      name:
+        - haproxy
+      state: present
+
+  - name: Deploy HAproxy config
+    become: yes
+    copy:
+      src: templates/haproxy.j2
+      dest: /etc/haproxy/haproxy.cfg 
+      owner: root
+      group: root
+    register: haproxyconf
+
+  - name: "Restart and enable HAproxy service"
+    become: yes
+    service:
+      name: haproxy
+      state: restarted
+      enabled: yes
+    when: haproxyconf.changed
+  
+  tags:
+    - bootstrap
+    - haproxy

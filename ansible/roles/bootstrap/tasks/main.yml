@@ -88,7 +88,6 @@
     package:
       name:
         - fail2ban
-        - nginx
       state: present
 
   - name: Pip upgrade pip
@@ -204,3 +203,11 @@
     - helm
     - helm-packages
     - nginx
+
+- block:
+  - name: Configure HAProxy
+    include_tasks: haproxy.yml
+
+  tags:
+    - bootstrap
+    - haproxy
