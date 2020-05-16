@@ -1,12 +1,6 @@
 ---
-- block:
-  # This is ugly, but helm module is broken
-  - name: Install ingress-nginx repo
-    shell: 'helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx/'
-  
-  - name: Install ingress-nginx
-    shell: 'helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx'
-
+- debug:
+    msg: "Nothing to do here yet"
   tags:
     - bootstrap
     - helm-packages

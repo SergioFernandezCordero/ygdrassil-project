@@ -75,6 +75,7 @@
     package:
       name:
         - fail2ban
+        - nginx
       state: present
 
   - name: Pip upgrade pip
@@ -165,8 +166,14 @@
     include_tasks: helm.yml
     tags:
       - bootstrap
-      - helm
       - helm-packages
+      - helm
+
+  - name: Install ingress-nginx controller
+    include_tasks: nginx.yml
+    tags:
+      - bootstrap
+      - nginx
 
   rescue:
     - fail:
@@ -182,3 +189,5 @@
   tags:
     - bootstrap
     - helm
+    - helm-packages
+    - nginx
