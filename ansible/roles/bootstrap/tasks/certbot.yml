@@ -1,0 +1,46 @@
+---
+- block:
+  - name: Install certbot
+    become: yes
+    package:
+      name: certbot
+      state: latest
+
+  - name: Create Certbot scripts directory
+    become: yes
+    file:
+      path: /opt/certbot/scripts/
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy Certbot script
+    become: yes
+    template:
+      src: certbot.j2
+      dest: /opt/certbot/scripts/run-certbot
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Link cronjob to renew Certbot certificates
+    become: yes
+    file:
+      src: /opt/certbot/scripts/run-certbot
+      dest: /etc/cron.daily/run-certbot
+      owner: root
+      group: root
+      state: link
+
+  - name: Get certificate from LetsEncrypt
+    become: yes
+    shell: '/opt/certbot/scripts/run-certbot'
+    register: certbot_out
+
+  - debug:
+      var: certbot_out.stdout_lines
+
+  tags:
+    - bootstrap
+    - certbot

@@ -1,0 +1,7 @@
+runuser -l root -c 'certbot certonly \
+    --non-interactive \
+    --domains {% for domain in ygdrassil_domains %}{% if loop.index > 1 %},{% endif %}ygdrassil.{{ domain }},{{ domain }},www.{{ domain }}{% endfor %} \
+    --expand \
+    --agree-tos \
+    --email {{ master_email }} \
+    --standalone'

@@ -205,6 +205,14 @@
     - nginx
 
 - block:
+  - name: Configure Certbot
+    include_tasks: certbot.yml
+  
+  tags:
+    - bootstrap
+    - certbot
+
+- block:
   - name: Configure HAProxy
     include_tasks: haproxy.yml
 
