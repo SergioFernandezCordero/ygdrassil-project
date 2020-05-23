@@ -22,8 +22,8 @@
       state: present
 
   - name: Upload custom ConfigMap
-    copy:
-      src: files/nginx-configmap.yml
+    template:
+      src: templates/nginx-configmap.j2
       dest: "{{ k8s_deps.path }}/nginx-configmap.yaml"
 
   - name: Apply custom configmap

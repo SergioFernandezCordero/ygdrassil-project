@@ -25,6 +25,24 @@ metadata:
   name: hello-world-service
 spec:
   selector:
-    app: helloworld
+    app: hello-world
   ports:
     - port: 8080 # Default port for image
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hello-world-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: ygdrassil.proyectopqmc.com
+    http:
+      paths:
+      - path: "/hello"
+        backend:
+          serviceName: hello-world-service
+          servicePort: 80

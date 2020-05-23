@@ -1,13 +1,13 @@
 ---
 - block:
-  - name: Create temporary directory for ingresses
+  - name: Create temporary directory for apps with ingresses definition
     tempfile:
       path: "/home/{{ master_user }}"
       state: directory
       suffix: _k8s_ingress
     register: k8s_ingress
 
-  - name: "Upload ingress definitions to {{ k8s_ingress.path }}"
+  - name: "Upload apps with ingress definitions to {{ k8s_ingress.path }}"
     become: yes
     copy:
       src: "{{ item.src }}"
@@ -16,19 +16,17 @@
       group: "{{ master_group }}"
     with_items:
       - { src: 'files/helloworld.yml', dest: '{{ k8s_ingress.path }}/helloworld.yml' }
-      - { src: 'files/default-ingress.yml', dest: '{{ k8s_ingress.path }}/default-ingress.yml' }
 
+  tags:
+    - ingress-apps
+    - hello-world
+
+- block:
   - name: Run helloworld app
     k8s:
       namespace: default
       state: present
       src: "{{ k8s_ingress.path }}/helloworld.yml"
-
-  - name: Create ingress for helloworld
-    k8s:
-      namespace: default
-      state: present
-      src: "{{ k8s_ingress.path }}/default-ingress.yml"
 
   always:
     - name: Tempdir cleanup
@@ -37,4 +35,5 @@
         path: "{{ k8s_ingress.path }}"
 
   tags:
-    - default-ingress
+    - ingress-apps
+    - hello-world
