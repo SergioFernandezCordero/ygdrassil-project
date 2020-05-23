@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aeneabot
+spec:
+  selector:
+    matchLabels:
+      app: aeneabot
+  template:
+    metadata:
+      labels:
+        app: aeneabot
+    spec:
+      containers:
+      - name: aeneabot
+        image: elautoestopista/aeneabot:latest
+        env:
+        - name: BOTNAME
+          value: "AeneaBot"
+        - name: AUTHUSER
+          value: "ElAutoestopista"
+        - name: LANG
+          value: "es"
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: aeneatoken
+              key: token

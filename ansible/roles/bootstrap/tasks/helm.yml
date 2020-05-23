@@ -1,0 +1,7 @@
+---
+- debug:
+    msg: "Nothing to do here yet"
+  tags:
+    - bootstrap
+    - helm-packages
+    - helm

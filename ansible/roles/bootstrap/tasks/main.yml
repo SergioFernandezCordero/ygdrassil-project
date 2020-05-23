@@ -12,6 +12,7 @@
     user:
       name: "{{ master_user }}"
       uid: "{{ master_uid }}"
+      group: "{{ master_group }}"
       groups:
         - "{{ master_group }}"
       home: "/home/{{ master_user }}"
@@ -42,12 +43,179 @@
   - name: "Deploy sudoers config"
     become: yes
     template:
-      src: templates/sudoers
+      src: templates/sudoers.j2
       dest: /etc/sudoers.d/99-ygdrassil-users
       owner: root
       group: root
       mode: 0444
 
+  - name: "Disable root login"
+    become: yes
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin'
+      line: PermitRootLogin no
+    register: disableroot
+
+  - name: "Restart SSH Service if needed"
+    become: yes
+    service:
+      name: sshd
+      state: restarted
+      enabled: yes
+    when: disableroot.changed
+
   tags:
     - bootstrap
     - master-user
+
+- block:
+  - name: Enable kernel IPv4 forwarding
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: '1'
+      sysctl_set: yes
+      state: present
+      reload: yes
+  
+  tags:
+    - bootstrap
+    - kernel
+
+- block:
+  - name: "Install packages"
+    become: yes
+    package:
+      name:
+        - fail2ban
+      state: present
+
+  - name: Pip upgrade pip
+    pip:
+      name:
+        - pip
+        - pyasn1
+      extra_args: --upgrade
+  
+  - name: Pip install stuff
+    pip:
+      name:
+        - pyhelm
+        - grpcio
+        - pyyaml
+        - openshift
+  
+  tags:
+    - bootstrap
+    - dependencies  
+
+- block:
+  - name: "Configure Fail2Ban SSH jail"
+    become: yes
+    template:
+      src: templates/fail2ban.j2
+      dest: /etc/fail2ban/jail.local
+      owner: root
+      group: root
+      mode: 0644
+    register: fail2banconf
+  
+  - name: "Restart and enable Fail2Ban service"
+    become: yes
+    service:
+      name: fail2ban
+      state: restarted
+      enabled: yes
+    when: fail2banconf.changed
+
+  - name: Change to cool motd
+    become: yes
+    template:
+      src: templates/motd.j2
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: 0644
+
+  rescue:    
+    - fail:
+        msg: "Please run again without root user"
+
+  tags:
+    - bootstrap
+    - fail2ban
+
+- block:
+  - name: Create temp directory
+    delegate_to: 127.0.0.1
+    tempfile:
+      state: directory
+      suffix: _helm
+    register: helm_temp
+  
+  - name: "Download Helm binary in temp path {{ helm_temp.path }}"
+    delegate_to: 127.0.0.1
+    get_url:
+      url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+      dest: "{{ helm_temp.path }}"
+
+  - name: Unarchive package in temp path
+    delegate_to: 127.0.0.1
+    unarchive:
+      src: "{{ helm_temp.path }}/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+      dest: "{{ helm_temp.path }}"
+  
+  - name: Upload Helm to nodes
+    become: yes
+    copy:
+      src: "{{ helm_temp.path }}/linux-amd64/helm"
+      dest: /usr/local/bin/helm
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Install kubernetes packages with Helm
+    include_tasks: helm.yml
+    tags:
+      - bootstrap
+      - helm-packages
+      - helm
+
+  - name: Install ingress-nginx controller
+    include_tasks: nginx.yml
+    tags:
+      - bootstrap
+      - nginx
+
+  rescue:
+    - fail:
+        msg: "Something went wrong"
+
+  always:
+    - name: "Remove temporal path {{ helm_temp.path }}"
+      delegate_to: 127.0.0.1
+      file:
+        path: "{{ helm_temp.path }}"
+        state: absent
+
+  tags:
+    - bootstrap
+    - helm
+    - helm-packages
+    - nginx
+
+- block:
+  - name: Configure Certbot
+    include_tasks: certbot.yml
+  
+  tags:
+    - bootstrap
+    - certbot
+
+- block:
+  - name: Configure HAProxy
+    include_tasks: haproxy.yml
+
+  tags:
+    - bootstrap
+    - haproxy

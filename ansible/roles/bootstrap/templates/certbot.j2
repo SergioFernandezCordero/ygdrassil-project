@@ -1,0 +1,10 @@
+runuser -l root -c 'certbot certonly \
+    --non-interactive \
+    --domains {% for domain in ygdrassil_domains %}{% if loop.index > 1 %},{% endif %}ygdrassil.{{ domain }},{{ domain }},www.{{ domain }}{% endfor %} \
+    --expand \
+    --agree-tos \
+    --email {{ master_email }} \
+    --standalone'
+sudo cat /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/fullchain.pem \
+    /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/privkey.pem \
+    | sudo tee /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/{{ ygdrassil_domains[0] }}.pem
