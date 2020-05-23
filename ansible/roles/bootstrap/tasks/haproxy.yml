@@ -1,5 +1,6 @@
 ---
 - block:
+
   - name: "Install HAproxy packages"
     become: yes
     package:
@@ -9,7 +10,7 @@
 
   - name: Deploy HAproxy config
     become: yes
-    copy:
+    template:
       src: templates/haproxy.j2
       dest: /etc/haproxy/haproxy.cfg 
       owner: root

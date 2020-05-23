@@ -5,3 +5,6 @@ runuser -l root -c 'certbot certonly \
     --agree-tos \
     --email {{ master_email }} \
     --standalone'
+sudo cat /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/fullchain.pem \
+    /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/privkey.pem \
+    | sudo tee /etc/letsencrypt/live/ygdrassil.{{ ygdrassil_domains[0] }}/{{ ygdrassil_domains[0] }}.pem
