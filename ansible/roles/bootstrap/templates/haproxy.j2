@@ -54,5 +54,5 @@ backend backendnodes
     http-request set-header X-Forwarded-Port %[dst_port]
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
-    server ygdrassil {{ ansible_default_ipv4.address }}:31847 check
+    server ygdrassil {{ ansible_default_ipv4.address }}:8080 check
 

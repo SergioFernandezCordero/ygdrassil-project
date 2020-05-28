@@ -1,4 +1,8 @@
 ---
+- name: Deploy Nginx
+  include_tasks: nginx.yml
+  tags:
+    - nginx
 
 - name: Deploy AenaBot
   include_tasks: aeneabot.yml

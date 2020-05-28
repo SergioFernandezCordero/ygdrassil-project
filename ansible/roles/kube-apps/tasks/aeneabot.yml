@@ -10,13 +10,13 @@
 
   - name: "Upload ingress definitions to {{ k8s_aeneabot.path }}"
     become: yes
-    copy:
+    template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
       owner: "{{ master_user }}"
       group: "{{ master_group }}"
     with_items:
-      - { src: 'files/aeneabot.yml', dest: '{{ k8s_aeneabot.path }}/aeneabot.yml' }
+      - { src: 'templates/aeneabot.j2', dest: '{{ k8s_aeneabot.path }}/aeneabot.yml' }
 
   - name: Run Aeneabot app
     k8s:
