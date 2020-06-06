@@ -1,0 +1,31 @@
+---
+- block:
+  # This is ugly, but helm module is broken
+  - name: Create temporary directory for ingresses
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_deps
+    register: k8s_deps
+
+  - name: Upload Traefik deploy template
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+    with_items:
+      - { src: 'templates/traefik-deploy.j2', dest: '{{ k8s_deps.path }}/traefik-deploy.yaml'}
+
+  - name: Deploy Traefik
+    k8s:
+      namespace: default
+      src: "{{ k8s_deps.path }}/traefik-deploy.yaml"
+      state: present
+
+  always:
+    - name: Tempdir cleanup
+      file:
+        state: absent
+        path: "{{ k8s_deps.path }}"
+
+  tags:
+    - traefik

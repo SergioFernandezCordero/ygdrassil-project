@@ -1,14 +1,14 @@
 ---
 
 - block:
-  - name: Create temporary directory for Aenea
+  - name: Create temporary directory for Whoami
     tempfile:
       path: "/home/{{ master_user }}"
       state: directory
-      suffix: _k8s_aeneabot
-    register: k8s_aeneabot
+      suffix: _k8s_whoami
+    register: k8s_whoami
 
-  - name: "Upload ingress definitions to {{ k8s_aeneabot.path }}"
+  - name: "Upload ingress definitions to {{ k8s_whoami.path }}"
     become: yes
     template:
       src: "{{ item.src }}"
@@ -16,19 +16,19 @@
       owner: "{{ master_user }}"
       group: "{{ master_group }}"
     with_items:
-      - { src: 'templates/aeneabot.j2', dest: '{{ k8s_aeneabot.path }}/aeneabot.yml' }
+      - { src: 'templates/whoami.j2', dest: '{{ k8s_whoami.path }}/whoami.yml' }
 
-  - name: Run Aeneabot app
+  - name: Run and expose Whoami app
     k8s:
       namespace: default
       state: present
-      src: "{{ k8s_aeneabot.path }}/aeneabot.yml"
+      src: "{{ k8s_whoami.path }}/whoami.yml"
 
   always:
     - name: Tempdir cleanup
       file:
         state: absent
-        path: "{{ k8s_aeneabot.path }}"
+        path: "{{ k8s_whoami.path }}"
 
   tags:
-    - aeneabot
+    - whoami

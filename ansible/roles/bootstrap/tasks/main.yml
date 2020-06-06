@@ -71,6 +71,7 @@
 
 - block:
   - name: Enable kernel IPv4 forwarding
+    become: yes
     sysctl:
       name: net.ipv4.ip_forward
       value: '1'
@@ -87,6 +88,10 @@
     become: yes
     package:
       name:
+        - python-setuptools
+        - python3-setuptools
+        - python-pip
+        - python3-pip
         - fail2ban
       state: present
 
@@ -104,6 +109,23 @@
         - grpcio
         - pyyaml
         - openshift
+ 
+  - name: Pip3 upgrade pip
+    pip:
+      name:
+        - pip
+        - pyasn1
+      extra_args: --upgrade
+      executable: pip3
+  
+  - name: Pip3 install stuff
+    pip:
+      name:
+        - pyhelm
+        - grpcio
+        - pyyaml
+        - openshift
+      executable: pip3
   
   tags:
     - bootstrap
@@ -181,12 +203,6 @@
       - helm-packages
       - helm
 
-  - name: Install ingress-nginx controller
-    include_tasks: nginx.yml
-    tags:
-      - bootstrap
-      - nginx
-
   rescue:
     - fail:
         msg: "Something went wrong"
@@ -202,20 +218,3 @@
     - bootstrap
     - helm
     - helm-packages
-    - nginx
-
-- block:
-  - name: Configure Certbot
-    include_tasks: certbot.yml
-  
-  tags:
-    - bootstrap
-    - certbot
-
-- block:
-  - name: Configure HAProxy
-    include_tasks: haproxy.yml
-
-  tags:
-    - bootstrap
-    - haproxy

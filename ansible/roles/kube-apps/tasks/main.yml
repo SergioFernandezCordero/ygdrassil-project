@@ -1,6 +1,15 @@
 ---
+- name: Deploy Traefik
+  include_tasks: traefik.yml
+  tags:
+    - traefik
 
 - name: Deploy AenaBot
   include_tasks: aeneabot.yml
   tags:
     - aeneabot
+
+- name: Deploy whoami test service
+  include_tasks: whoami.yml
+  tags:
+    - whoami
