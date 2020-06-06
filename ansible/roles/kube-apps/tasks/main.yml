@@ -1,8 +1,8 @@
 ---
-- name: Deploy Nginx
-  include_tasks: nginx.yml
+- name: Deploy Traefik
+  include_tasks: traefik.yml
   tags:
-    - nginx
+    - traefik
 
 - name: Deploy AenaBot
   include_tasks: aeneabot.yml
