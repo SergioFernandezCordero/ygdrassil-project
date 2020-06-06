@@ -10,14 +10,14 @@ ansible-playbook bootstrap-ygdrassil.yml --tags master-user -u root
 ansible-playbook bootstrap-ygdrassil.yml
 ```
 
-3. Bootstap only prerrequisites and accessories (certbot, haproxy, fail2ban, and so):
+3. Bootstap only prerrequisites and accessories (fail2ban, and so):
 ```
 ansible-playbook bootstrap-ygdrassil.yml--tags bootstrap
 ```
 
-4. Deploy Nginx Ingress
+4. Deploy Traefik Ingress
 ```
-ansible-playbook deploy-apps.yml --tags nginx
+ansible-playbook deploy-apps.yml --tags traefik
 ```
 
 5. Enjoy deploying stuff

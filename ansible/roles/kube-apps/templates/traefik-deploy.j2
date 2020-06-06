@@ -146,28 +146,17 @@ spec:
   ports:
     - protocol: TCP
       name: web
-      port: 8000
+      port: 80
     - protocol: TCP
       name: admin
       port: 8008
     - protocol: TCP
       name: websecure
-      port: 8443
+      port: 443
   selector:
     app: traefik
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: whoami
-
-spec:
-  ports:
-    - protocol: TCP
-      name: web
-      port: 80
-  selector:
-    app: whoami
+  externalIPs:
+  - {{ ansible_default_ipv4.address }}
 
 ---
 apiVersion: v1
@@ -202,44 +191,16 @@ spec:
           args:
             - --api.insecure
             - --accesslog
-            - --entrypoints.web.Address=:8000
-            - --entrypoints.websecure.Address=:8443
+            - --entrypoints.web.Address=:80
+            - --entrypoints.websecure.Address=:443
             - --providers.kubernetescrd
             - --certificatesresolvers.default.acme.tlschallenge
-            - --certificatesresolvers.default.acme.email=sergio@fernandezcordero.net
+            - --certificatesresolvers.default.acme.email={{ master_email }}
             - --certificatesresolvers.default.acme.storage=acme.json
-            # Please note that this is the staging Let's Encrypt server.
-            # Once you get things working, you should remove that whole line altogether.
-            #- --certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-          ports:
-            - name: web
-              containerPort: 8000
-            - name: websecure
-              containerPort: 8443
-            - name: admin
-              containerPort: 8008
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  namespace: default
-  name: whoami
-  labels:
-    app: whoami
-
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: whoami
-  template:
-    metadata:
-      labels:
-        app: whoami
-    spec:
-      containers:
-        - name: whoami
-          image: containous/whoami
           ports:
             - name: web
               containerPort: 80
+            - name: websecure
+              containerPort: 443
+            - name: admin
+              containerPort: 8008

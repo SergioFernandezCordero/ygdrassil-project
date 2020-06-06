@@ -8,3 +8,8 @@
   include_tasks: aeneabot.yml
   tags:
     - aeneabot
+
+- name: Deploy whoami test service
+  include_tasks: whoami.yml
+  tags:
+    - whoami

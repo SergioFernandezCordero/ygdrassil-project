@@ -14,22 +14,11 @@
       dest: "{{ item.dest }}"
     with_items:
       - { src: 'templates/traefik-deploy.j2', dest: '{{ k8s_deps.path }}/traefik-deploy.yaml'}
-      - { src: 'templates/traefik-ingress-routes.j2', dest: '{{ k8s_deps.path }}/traefik-ingress-routes.yaml'}
 
   - name: Deploy Traefik
     k8s:
       namespace: default
       src: "{{ k8s_deps.path }}/traefik-deploy.yaml"
-      state: present
-  
-  - name: Warmup
-    pause:
-      seconds: 10
-
-  - name: Deploy Traefik Ingress Routes
-    k8s:
-      namespace: default
-      src: "{{ k8s_deps.path }}/traefik-ingress-routes.yaml"
       state: present
 
   always:
