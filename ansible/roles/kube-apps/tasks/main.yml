@@ -9,6 +9,11 @@
   tags:
     - aeneabot
 
+- name: Deploy Dashboard service
+  include_tasks: dashboard.yml
+  tags:
+    - dashboard
+
 - name: Deploy whoami test service
   include_tasks: whoami.yml
   tags:

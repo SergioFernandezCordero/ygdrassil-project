@@ -1,0 +1,30 @@
+---
+- block:
+  - name: Create temporary directory for dashboard
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_deps
+    register: k8s_deps
+
+  - name: Upload Dashboard deploy template
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+    with_items:
+      - { src: 'templates/dashboard.j2', dest: '{{ k8s_deps.path }}/dashboard.yaml'}
+
+  - name: Deploy Dashboard
+    k8s:
+      namespace: default
+      src: "{{ k8s_deps.path }}/dashboard.yaml"
+      state: present
+
+  always:
+    - name: Tempdir cleanup
+      file:
+        state: absent
+        path: "{{ k8s_deps.path }}"
+
+  tags:
+    - dashboard
