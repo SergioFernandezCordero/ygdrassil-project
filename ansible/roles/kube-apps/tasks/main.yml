@@ -14,6 +14,11 @@
   tags:
     - dashboard
 
+- name: Deploy Jaeger service
+  include_tasks: jaeger.yml
+  tags:
+    - jaeger
+
 - name: Deploy whoami test service
   include_tasks: whoami.yml
   tags:
