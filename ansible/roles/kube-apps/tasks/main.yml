@@ -24,6 +24,11 @@
   tags:
     - jaeger
 
+- name: Deploy Sergio web service
+  include_tasks: sergio.yml
+  tags:
+    - sergio
+
 - name: Deploy whoami test service
   include_tasks: whoami.yml
   tags:
