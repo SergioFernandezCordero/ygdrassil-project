@@ -29,6 +29,11 @@
   tags:
     - sergio
 
+- name: Deploy Jenkins service 
+  include_tasks: jenkins.yml
+  tags:
+    - jenkins
+
 - name: Deploy whoami test service
   include_tasks: whoami.yml
   tags:
