@@ -1,0 +1,93 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins-rsa
+type: Opaque
+data:
+  id_rsa: {{ jenkins_rsa | b64encode }}
+  config: {{ jenkins_ssh_config | b64encode }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: jenkins
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: jenkins
+  labels:
+    app: whoami
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      initContainers:
+        - name: jenkins-loader
+          image: jenkins/jenkins:lts
+          command: ["/bin/bash", "-c", "cd /var/jenkins_home && git init && git remote add origin {{ jenkins_git_repo }} && git pull origin {{ jenkins_git_branch }} && git branch --set-upstream-to=origin/{{ jenkins_git_branch}} {{jenkins_git_branch }}"]
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: jenkins-rsa
+              mountPath: "/var/jenkins_home/.ssh"
+              readOnly: true
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts
+          env:
+            - name: JAVA_OPTS
+              value: -Djenkins.install.runSetupWizard=false
+          ports:
+            - name: http-port
+              containerPort: 8080
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: jenkins-rsa
+              mountPath: "/var/jenkins_home/.ssh"
+              readOnly: true
+      volumes:
+        - name: jenkins-home
+          emptyDir: {}
+        - name: jenkins-rsa
+          secret:
+            secretName: jenkins-rsa
+            defaultMode: 0400
+      securityContext:
+        fsGroup: 1000
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress-jenkins-tls
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`cicd.ygdrassil.proyectopqmc.com`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: jenkins
+      port: 80
+  tls:
+    certResolver: default
