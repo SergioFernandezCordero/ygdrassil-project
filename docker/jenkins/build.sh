@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 #
-docker build -t elautoestopista/jenkins .
+docker build --pull --no-cache -t elautoestopista/jenkins .
