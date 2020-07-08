@@ -173,7 +173,8 @@ jenkins_rsa: !vault |
 jenkins_ssh_config: >
           Host github.com
             StrictHostKeyChecking no
-
+jenkins_git_repo: git@github.com:SergioFernandezCordero/ygdrassil-jenkins.git
+jenkins_git_branch: master
 # HAProxy stuff
 haproxy_stats_pass: !vault |
           $ANSIBLE_VAULT;1.1;AES256

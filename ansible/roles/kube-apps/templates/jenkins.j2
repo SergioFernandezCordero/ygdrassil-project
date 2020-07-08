@@ -39,6 +39,16 @@ spec:
       labels:
         app: jenkins
     spec:
+      initContainers:
+        - name: jenkins-loader
+          image: jenkins/jenkins:lts
+          command: ["/bin/bash", "-c", "cd /var/jenkins_home && git init && git remote add origin {{ jenkins_git_repo }} && git pull origin {{ jenkins_git_branch }} && git branch --set-upstream-to=origin/{{ jenkins_git_branch}} {{jenkins_git_branch }}"]
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: jenkins-rsa
+              mountPath: "/var/jenkins_home/.ssh"
+              readOnly: true
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
@@ -54,10 +64,6 @@ spec:
             - name: jenkins-rsa
               mountPath: "/var/jenkins_home/.ssh"
               readOnly: true
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/bash", "-c", "cd /var/jenkins_home && sleep 20 && find . -maxdepth 1 -not -name '.ssh' -not -name '.' -not -name '..' | xargs rm -r -- && git init && git remote add origin git@github.com:SergioFernandezCordero/ygdrassil-jenkins.git && git pull origin master && git branch --set-upstream-to=origin/master master"]
       volumes:
         - name: jenkins-home
           emptyDir: {}
