@@ -41,7 +41,7 @@ spec:
     spec:
       initContainers:
         - name: jenkins-loader
-          image: jenkins/jenkins:lts
+          image: elautoestopista/jenkins:latest
           command: ["/bin/bash", "-c", "cd /var/jenkins_home && git init && git remote add origin {{ jenkins_git_repo }} && git pull origin {{ jenkins_git_branch }} && git branch --set-upstream-to=origin/{{ jenkins_git_branch}} {{jenkins_git_branch }}"]
           volumeMounts:
             - name: jenkins-home
@@ -51,10 +51,17 @@ spec:
               readOnly: true
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: elautoestopista/jenkins:latest
+          resources:
+            requests:
+              memory: "1024M"
+              cpu: "500m"
+            limits:
+              memory: "2048M"
+              cpu: "1"
           env:
             - name: JAVA_OPTS
-              value: -Djenkins.install.runSetupWizard=false
+              value: -Xmx2048m -Djenkins.install.runSetupWizard=false
           ports:
             - name: http-port
               containerPort: 8080
