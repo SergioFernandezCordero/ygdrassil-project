@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance
+  - name: ygdrassil
     image: elautoestopista/ygdrassil-debian:testing
     pre_build_image: true
 provisioner:
