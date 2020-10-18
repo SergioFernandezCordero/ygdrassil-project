@@ -60,7 +60,7 @@
   - name: "Restart SSH Service if needed"
     become: yes
     service:
-      name: sshd
+      name: ssh
       state: restarted
       enabled: yes
     when: disableroot.changed
