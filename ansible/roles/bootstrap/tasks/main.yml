@@ -60,7 +60,7 @@
   - name: "Restart SSH Service if needed"
     become: yes
     service:
-      name: sshd
+      name: ssh
       state: restarted
       enabled: yes
     when: disableroot.changed
@@ -78,12 +78,19 @@
       sysctl_set: yes
       state: present
       reload: yes
+    tags:
+      - molecule-notest
   
   tags:
     - bootstrap
     - kernel
 
 - block:
+  - name: "Upgrade APT database"
+    become: yes
+    apt:
+      update-cache: yes
+
   - name: "Install packages"
     become: yes
     package:
