@@ -4,9 +4,16 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: ygdrassil
+  - name: ygdrassil-testing
     image: elautoestopista/ygdrassil-debian:testing
-    pre_build_image: true
+    capabilities: 
+      - SYS_ADMIN
+    interactive: yes
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    tmpfs:
+      - /run
+    command: '/sbin/init'
 provisioner:
   name: ansible
 verifier:
