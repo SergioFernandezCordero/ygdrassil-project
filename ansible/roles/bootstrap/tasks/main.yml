@@ -86,6 +86,11 @@
     - kernel
 
 - block:
+  - name: "Upgrade APT database"
+    become: yes
+    apt:
+      update-cache: yes
+
   - name: "Install packages"
     become: yes
     package:
