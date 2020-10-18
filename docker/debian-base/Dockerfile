@@ -1,4 +1,4 @@
-FROM alehaa/debian-systemd:stretch
+FROM alehaa/debian-systemd:buster
 
 LABEL maintainer="sergio@fernandezcordero.net"
 

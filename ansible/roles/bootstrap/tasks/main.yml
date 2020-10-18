@@ -78,6 +78,8 @@
       sysctl_set: yes
       state: present
       reload: yes
+    tags:
+      - molecule-notest
   
   tags:
     - bootstrap
