@@ -6,6 +6,31 @@ metadata:
 type: Opaque
 data:
   token: {{ aenea_token }}
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: aenea-db-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 2Gi
+  hostPath: 
+    path: /mnt/pvs
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: aenea-db-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 2Gi
+  storageClassName: local-storage
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,6 +48,9 @@ spec:
       containers:
       - name: aeneabot
         image: elautoestopista/aeneabot:latest
+        volumeMounts:
+          - name: aenea-db
+            mountPath: /var/aenea-db       
         env:
         - name: BOTNAME
           value: "AeneaBot"
@@ -35,3 +63,7 @@ spec:
             secretKeyRef:
               name: aeneatoken
               key: token
+      volumes:
+        - name: aenea-db
+          persistentVolumeClaim: 
+            claimName: aenea-db-pvc
