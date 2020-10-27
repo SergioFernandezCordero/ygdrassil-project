@@ -28,6 +28,6 @@ ansible-playbook -i inventory/ygdrassil deploy-apps.yml --tags your-app # For pr
 
 ## TODO:
 
-- [ ] Create vars files per environment (test & prod).
-- [ ] Modify tasks to use them in roles depending on the inventory used (minikube or ygdrassil).
+- [x] Create vars files per environment (test & prod).
+- [x] Modify tasks to use them in roles depending on the inventory used (minikube or ygdrassil).
 - [ ] Ensure Test environment deployment is possible.
