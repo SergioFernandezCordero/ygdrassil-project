@@ -3,7 +3,7 @@
 - block:
   - name: Create temporary directory for Aenea
     tempfile:
-      path: "/home/{{ master_user }}"
+      path: "/home/{{ ansible_user | default(master_user, true) }}"
       state: directory
       suffix: _k8s_aeneabot
     register: k8s_aeneabot
@@ -13,8 +13,8 @@
     template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
-      owner: "{{ master_user }}"
-      group: "{{ master_group }}"
+      owner: "{{ ansible_user | default(master_user, true) }}"
+      group: "{{ ansible_user | default(master_user, true) }}"
     with_items:
       - { src: 'templates/aeneabot.j2', dest: '{{ k8s_aeneabot.path }}/aeneabot.yml' }
 
