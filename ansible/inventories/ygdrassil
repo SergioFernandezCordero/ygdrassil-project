@@ -4,6 +4,10 @@ all:
     ygdrassil:
       hosts:
         ygdrassil.proyectopqmc.com:
+          ansible_user: ygdrassil
+          remote_user: ygdrassil
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+          env: ygdrassil
     k8-master:
       hosts:
         ygdrassil.proyectopqmc.com:

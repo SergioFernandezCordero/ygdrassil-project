@@ -21,3 +21,13 @@ ansible-playbook deploy-apps.yml --tags traefik
 ```
 
 5. Enjoy deploying stuff
+```
+ansible-playbook -i inventory/minikube deploy-apps.yml --tags your-app # For local testing
+ansible-playbook -i inventory/ygdrassil deploy-apps.yml --tags your-app # For production
+```
+
+## TODO:
+
+- [x] Create vars files per environment (test & prod).
+- [x] Modify tasks to use them in roles depending on the inventory used (minikube or ygdrassil).
+- [ ] Ensure Test environment deployment is possible.

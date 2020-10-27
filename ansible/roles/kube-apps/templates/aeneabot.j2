@@ -53,11 +53,11 @@ spec:
             mountPath: /var/aenea-db       
         env:
         - name: BOTNAME
-          value: "AeneaBot"
+          value: {{ aenea_botname }}
         - name: AUTHUSER
-          value: "ElAutoestopista"
+          value: {{ aenea_authuser }}
         - name: LANG
-          value: "es"
+          value: {{ aenea_lang }}
         - name: TOKEN
           valueFrom:
             secretKeyRef:

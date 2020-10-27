@@ -2,6 +2,6 @@
 - hosts: all
   gather_facts: true
   vars_files:
-    - vars/ygdrassil.yml
+    - vars/{{ env }}.yml
   roles:
     - kube-apps
