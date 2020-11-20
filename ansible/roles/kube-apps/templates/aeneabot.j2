@@ -47,10 +47,10 @@ spec:
     spec:
       containers:
       - name: aeneabot
-        image: elautoestopista/aeneabot:latest
+        image: elautoestopista/aeneabot:{{ version | default('latest', true) }}
         volumeMounts:
           - name: aenea-db
-            mountPath: /var/aenea-db       
+            mountPath: {{ aenea_dbpath | default('/var/aenea-db', true) }}      
         env:
         - name: BOTNAME
           value: {{ aenea_botname }}
@@ -58,6 +58,10 @@ spec:
           value: {{ aenea_authuser }}
         - name: LANG
           value: {{ aenea_lang }}
+        - name: DB_PATH
+          value: {{ aenea_dbpath | default('/var/aenea-db', true) }}
+        - name: LOGLEVEL
+          value: {{ aenea_loglevel| default('INFO', true) }}
         - name: TOKEN
           valueFrom:
             secretKeyRef:
