@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: aeneabot
-        image: elautoestopista/aeneabot:{{ version | default('latest', true) }}
+        image: elautoestopista/aeneabot:{{ aenea_version | default('latest', true) }}
         volumeMounts:
           - name: aenea-db
             mountPath: {{ aenea_dbpath | default('/var/aenea-db', true) }}      
