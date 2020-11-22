@@ -45,28 +45,39 @@ spec:
       labels:
         app: aeneabot
     spec:
-      containers:
-      - name: aeneabot
-        image: elautoestopista/aeneabot:{{ aenea_version | default('latest', true) }}
-        volumeMounts:
+      initContainers:
+        - name: permission-fix
+          image: alpine:latest
+          command: ["/bin/chown","-R","1001:1001", "{{ aenea_dbpath | default('/var/aenea-db', true) }}"]
+          volumeMounts:
           - name: aenea-db
-            mountPath: {{ aenea_dbpath | default('/var/aenea-db', true) }}      
-        env:
-        - name: BOTNAME
-          value: {{ aenea_botname }}
-        - name: AUTHUSER
-          value: {{ aenea_authuser }}
-        - name: LANG
-          value: {{ aenea_lang }}
-        - name: DB_PATH
-          value: {{ aenea_dbpath | default('/var/aenea-db', true) }}
-        - name: LOGLEVEL
-          value: {{ aenea_loglevel| default('INFO', true) }}
-        - name: TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: aeneatoken
-              key: token
+            mountPath: {{ aenea_dbpath | default('/var/aenea-db', true) }}
+      containers:
+        - name: aeneabot
+          image: elautoestopista/aeneabot:{{ aenea_version | default('latest', true) }}
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+          volumeMounts:
+            - name: aenea-db
+              mountPath: {{ aenea_dbpath | default('/var/aenea-db', true) }}      
+          env:
+          - name: BOTNAME
+            value: {{ aenea_botname }}
+          - name: AUTHUSER
+            value: {{ aenea_authuser }}
+          - name: LANG
+            value: {{ aenea_lang }}
+          - name: DB_PATH
+            value: {{ aenea_dbpath | default('/var/aenea-db', true) }}
+          - name: LOGLEVEL
+            value: {{ aenea_loglevel| default('INFO', true) }}
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: aeneatoken
+                key: token
       volumes:
         - name: aenea-db
           persistentVolumeClaim: 
