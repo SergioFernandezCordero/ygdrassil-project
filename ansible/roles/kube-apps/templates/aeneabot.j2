@@ -73,6 +73,8 @@ spec:
             value: {{ aenea_dbpath | default('/var/aenea-db', true) }}
           - name: LOGLEVEL
             value: {{ aenea_loglevel| default('INFO', true) }}
+          - name: ENABLE_JAEGER
+            value: {{ aenea_enable_jaeger | default('false', true) }}
           - name: TOKEN
             valueFrom:
               secretKeyRef:
