@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello-kubernetes
+  name: sergio-web-lb
 spec:
   type: LoadBalancer
   ports:
   - port: 80
     targetPort: 8080
   selector:
-    app: hello-kubernetes
+    app: sergio-web
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-kubernetes
+  name: sergio-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-kubernetes
+      app: sergio-web
   template:
     metadata:
       labels:
-        app: hello-kubernetes
+        app: sergio-web
     spec:
       containers:
-      - name: hello-kubernetes
+      - name: sergio-web
         image: paulbouwer/hello-kubernetes:1.8
         ports:
         - containerPort: 8080
@@ -46,7 +46,38 @@ spec:
   - match: Host(`sergio.fernandezcordero.net`) && PathPrefix(`/`)
     kind: Rule
     services:
-    - name: hello-kubernetes
+    - name: sergio-web-lb
       port: 80
   tls:
     certResolver: default
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress-sergio
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`sergio.fernandezcordero.net`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: sergio-web-lb
+      port: 80
+    middlewares:
+      - name: redirect-https
+        namespace: kube-system
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+  namespace: kube-system
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: "true"
+    port: 443
