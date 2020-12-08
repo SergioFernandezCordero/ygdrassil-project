@@ -6,9 +6,34 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 2368
   selector:
     app: sergio-web
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: sergio-web-db-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 2Gi
+  hostPath: 
+    path: /mnt/sergio-web
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: sergio-web-db-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 2Gi
+  storageClassName: local-storage
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -25,13 +50,20 @@ spec:
         app: sergio-web
     spec:
       containers:
-      - name: sergio-web
-        image: paulbouwer/hello-kubernetes:1.8
-        ports:
-        - containerPort: 8080
-        env:
-        - name: MESSAGE
-          value: Look at me Morty, I'm a container! Container Rick!
+        - name: sergio-web
+          image: ghost:3.39.0
+          ports:
+            - containerPort: 2368
+          env:
+            - name: url
+              value: https://sergio.fernandezcordero.net
+          volumeMounts:
+            - name: sergio-web-db
+              mountPath: /var/lib/ghost/content
+      volumes:
+        - name: sergio-web-db
+          persistentVolumeClaim: 
+            claimName: sergio-web-db-pvc
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
