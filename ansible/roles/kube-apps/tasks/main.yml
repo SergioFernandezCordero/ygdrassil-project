@@ -38,3 +38,8 @@
   include_tasks: whoami.yml
   tags:
     - whoami
+
+- name: Deploy Impostor AmongUs Server
+  include_tasks: impostor.yml
+  tags:
+    - impostor
