@@ -43,3 +43,8 @@
   include_tasks: impostor.yml
   tags:
     - impostor
+
+- name: Deploy Minecraft Server
+  include_tasks: minecraft.yml
+  tags:
+    - minecraft

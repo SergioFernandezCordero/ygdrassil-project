@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6969
+    targetPort: 6969
+  selector:
+    app: minecraft
+  externalIPs:
+  - {{ ansible_default_ipv4.address }}
+
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: minecraft-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 1Gi
+  hostPath: 
+    path: /mnt/minecraft
+  storageClassName: local-storage
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: minecraft-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  storageClassName: local-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      volumes:
+        - name: minecraft-data
+          persistentVolumeClaim: 
+            claimName: minecraft-pvc
+      containers:
+        - name: minecraft
+          image: itzg/minecraft-server
+          ports:
+            - containerPort: 6969
+          volumeMounts:
+            - name: minecraft-data
+              mountPath: /data
+          env:
+            # Game Configurations
+            - name: SERVER_NAME
+              value: "{{ mc_servername }}"
+            - name: SERVER_PORT
+              value: "{{ mc_port }}"
+            - name: MODE
+              value: "{{ mc_mode }}"
+            - name: MOTD
+              value: "{{ mc_moto }}"
+            - name: DIFFICULTY
+              value: "{{ mc_difficulty }}"
+            - name: WHITELIST
+              value: "{{ mc_whitelist }}"
+            - name: OPS
+              value: "{{ mc_ops }}"
+            - name: MAX_PLAYERS
+              value: "{{ mc_maxplayers }}"
+            - name: FORCE_GAMEMODE
+              value: "true"
+            - name: SNOOPER_ENABLED
+              value: "false"
+            - name: SPAWN_ANIMALS
+              value: "true"
+            - name: SPAWN_MONSTERS
+              value: "true"
+            - name: VIEW_DISTANCE
+              value: "10"
+            - name: EULA
+              value: "TRUE"
+            - name: ENABLE_RCON
+              value: "false"
+            - name: ENABLE_ROLLING_LOGS
+              value: "true"
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: MEMORY
+              value: "{{ mc_heapmem }}"
+            - name: ENABLE_COMMAND_BLOCK
+              value: "true"
