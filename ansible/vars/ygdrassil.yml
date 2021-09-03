@@ -200,3 +200,15 @@ aenea_lang: es
 aenea_version: latest
 aenea_dbpath: /var/aenea-db
 aenea_loglevel: INFO
+
+# Minecraft
+
+mc_heapmem: "2G"
+mc_servername: "YGDRASSIL"
+mc_port: "6969"
+mc_moto: "Ygrdassil Minecraft Secure Place"
+mc_mode: "adventure"
+mc_difficulty: "easy"
+mc_maxplayers: "10"
+mc_ops: "AstroHitchHikker"
+mc_whitelist: "AstroHitchHikker"
