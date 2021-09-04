@@ -205,10 +205,10 @@ aenea_loglevel: INFO
 
 mc_heapmem: "2G"
 mc_servername: "YGDRASSIL"
-mc_port: "6969"
+mc_port: "19132"
 mc_moto: "Ygrdassil Minecraft Secure Place"
 mc_mode: "creative"
 mc_difficulty: "easy"
 mc_maxplayers: "10"
 mc_ops: "AstroHitchHikker"
-mc_whitelist: "AstroHitchHikker"
+mc_whitelist: ""

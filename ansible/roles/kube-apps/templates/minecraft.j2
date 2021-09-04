@@ -6,7 +6,8 @@ spec:
   type: ClusterIP
   ports:
   - port: 6969
-    targetPort: 6969
+    targetPort: {{ mc_port }}
+    protocol: UDP
   selector:
     app: minecraft
   externalIPs:
@@ -60,9 +61,9 @@ spec:
             claimName: minecraft-pvc
       containers:
         - name: minecraft
-          image: itzg/minecraft-server
+          image: itzg/minecraft-bedrock-server
           ports:
-            - containerPort: 6969
+            - containerPort: {{ mc_port }}
           volumeMounts:
             - name: minecraft-data
               mountPath: /data
@@ -72,28 +73,22 @@ spec:
               value: "{{ mc_servername }}"
             - name: SERVER_PORT
               value: "{{ mc_port }}"
-            - name: MODE
+            - name: GAMEMODE
               value: "{{ mc_mode }}"
             - name: MOTD
               value: "{{ mc_moto }}"
             - name: DIFFICULTY
               value: "{{ mc_difficulty }}"
-            - name: WHITELIST
+            - name: ALLOW_LIST_USERS
               value: "{{ mc_whitelist }}"
             - name: OPS
               value: "{{ mc_ops }}"
             - name: MAX_PLAYERS
               value: "{{ mc_maxplayers }}"
+            - name: DEFAULT_PLAYER_PERMISSION_LEVEL
+              value: "member"
             - name: FORCE_GAMEMODE
               value: "true"
-            - name: SNOOPER_ENABLED
-              value: "false"
-            - name: SPAWN_ANIMALS
-              value: "true"
-            - name: SPAWN_MONSTERS
-              value: "true"
-            - name: VIEW_DISTANCE
-              value: "10"
             - name: EULA
               value: "TRUE"
             - name: ENABLE_RCON
