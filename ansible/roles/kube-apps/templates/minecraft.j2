@@ -67,8 +67,12 @@ spec:
           volumeMounts:
             - name: minecraft-data
               mountPath: /data
+          tty: true
+          stdin: true
           env:
             # Game Configurations
+            - name: DEBUG
+              value: "{{ mc_debug | default("false", true) }}"
             - name: SERVER_NAME
               value: "{{ mc_servername }}"
             - name: SERVER_PORT
