@@ -44,7 +44,12 @@
   tags:
     - impostor
 
-- name: Deploy Minecraft Server
+- name: Deploy Minecraft Bedrock Server
   include_tasks: minecraft.yml
   tags:
     - minecraft
+
+- name: Deploy Minecraft Java Server
+  include_tasks: minecraft.yml
+  tags:
+    - minecraft-java

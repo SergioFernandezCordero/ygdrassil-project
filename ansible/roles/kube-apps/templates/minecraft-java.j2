@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-java
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6969
+    targetPort: {{ mc_port }}
+    protocol: UDP
+  selector:
+    app: minecraft-java
+  externalIPs:
+  - {{ ansible_default_ipv4.address }}
+
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: minecraft-java-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 1Gi
+  hostPath: 
+    path: /mnt/minecraft-java
+  storageClassName: local-storage
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: minecraft-java-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  storageClassName: local-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-java
+  template:
+    metadata:
+      labels:
+        app: minecraft-java
+    spec:
+      volumes:
+        - name: minecraft-java-data
+          persistentVolumeClaim: 
+            claimName: minecraft-java-pvc
+      containers:
+        - name: minecraft-java
+          image: itzg/minecraft-server
+          ports:
+            - containerPort: {{ mc_port }}
+          volumeMounts:
+            - name: minecraft-java-data
+              mountPath: /data
+          tty: true
+          stdin: true
+          env:
+            # Game Configurations
+            - name: DEBUG
+              value: "{{ mc_debug | default("false", true) }}"
+            - name: SERVER_NAME
+              value: "{{ mc_servername }}"
+            - name: SERVER_PORT
+              value: "{{ mc_port }}"
+            - name: GAMEMODE
+              value: "{{ mc_mode }}"
+            - name: MOTD
+              value: "{{ mc_moto }}"
+            - name: DIFFICULTY
+              value: "{{ mc_difficulty }}"
+            - name: ALLOW_LIST_USERS
+              value: "{{ mc_whitelist }}"
+            - name: OPS
+              value: "{{ mc_ops }}"
+            - name: MAX_PLAYERS
+              value: "{{ mc_maxplayers }}"
+            - name: DEFAULT_PLAYER_PERMISSION_LEVEL
+              value: "visitor"
+            - name: FORCE_GAMEMODE
+              value: "true"
+            - name: EULA
+              value: "TRUE"
+            - name: ENABLE_RCON
+              value: "false"
+            - name: ENABLE_ROLLING_LOGS
+              value: "true"
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: MEMORY
+              value: "{{ mc_heapmem }}"
+            - name: ENABLE_COMMAND_BLOCK
+              value: "true"
