@@ -5,9 +5,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 6969
-    targetPort: {{ mc_port }}
-    protocol: UDP
+  - port: 8989
+    targetPort: {{ mc_java_port }}
+    protocol: TCP
   selector:
     app: minecraft-java
   externalIPs:
@@ -63,7 +63,7 @@ spec:
         - name: minecraft-java
           image: itzg/minecraft-server
           ports:
-            - containerPort: {{ mc_port }}
+            - containerPort: {{ mc_java_port }}
           volumeMounts:
             - name: minecraft-java-data
               mountPath: /data
@@ -72,23 +72,29 @@ spec:
           env:
             # Game Configurations
             - name: DEBUG
-              value: "{{ mc_debug | default("false", true) }}"
+              value: "{{ mc_java_debug | default("false", true) }}"
+            - name: OVERRIDE_SERVER_PROPERTIES
+              vale: "true"
             - name: SERVER_NAME
-              value: "{{ mc_servername }}"
+              value: "{{ mc_java_servername }}"
             - name: SERVER_PORT
-              value: "{{ mc_port }}"
-            - name: GAMEMODE
-              value: "{{ mc_mode }}"
+              value: "{{ mc_java_port }}"
+            - name: MODE
+              value: "{{ mc_java_mode }}"
             - name: MOTD
-              value: "{{ mc_moto }}"
+              value: "{{ mc_java_moto }}"
             - name: DIFFICULTY
-              value: "{{ mc_difficulty }}"
-            - name: ALLOW_LIST_USERS
-              value: "{{ mc_whitelist }}"
+              value: "{{ mc_java_difficulty }}"
+            - name: WHITELIST
+              value: "{{ mc_java_whitelist }}"
+            - name: ENFORCE_WHITELIST
+              value: "TRUE"
             - name: OPS
-              value: "{{ mc_ops }}"
+              value: "{{ mc_java_ops }}"
+            - name: OVERRIDE_OPS
+              value: "TRUE"
             - name: MAX_PLAYERS
-              value: "{{ mc_maxplayers }}"
+              value: "{{ mc_java_maxplayers }}"
             - name: DEFAULT_PLAYER_PERMISSION_LEVEL
               value: "visitor"
             - name: FORCE_GAMEMODE
@@ -97,11 +103,17 @@ spec:
               value: "TRUE"
             - name: ENABLE_RCON
               value: "false"
+            - name: RCON_PASSWORD
+              value: "{{mc_java_rcon_passwd }}"
+            - name: PVP
+              value: "{{ mc_java_pvp }}"
             - name: ENABLE_ROLLING_LOGS
+              value: "true"
+            - name: GENERATE_STRUCTURES
               value: "true"
             - name: TZ
               value: "Europe/Madrid"
             - name: MEMORY
-              value: "{{ mc_heapmem }}"
+              value: "{{ mc_java_heapmem }}"
             - name: ENABLE_COMMAND_BLOCK
               value: "true"
