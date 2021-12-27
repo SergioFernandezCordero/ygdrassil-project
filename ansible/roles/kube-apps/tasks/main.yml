@@ -50,6 +50,6 @@
     - minecraft
 
 - name: Deploy Minecraft Java Server
-  include_tasks: minecraft.yml
+  include_tasks: minecraft-java.yml
   tags:
     - minecraft-java
