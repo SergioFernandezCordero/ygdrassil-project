@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-java
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8989
+    targetPort: {{ mc_java_port }}
+    protocol: TCP
+  selector:
+    app: minecraft-java
+  externalIPs:
+  - {{ ansible_default_ipv4.address }}
+
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: minecraft-java-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 1Gi
+  hostPath: 
+    path: /mnt/minecraft-java
+  storageClassName: local-storage
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: minecraft-java-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  storageClassName: local-storage
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-java
+  template:
+    metadata:
+      labels:
+        app: minecraft-java
+    spec:
+      volumes:
+        - name: minecraft-java-data
+          persistentVolumeClaim: 
+            claimName: minecraft-java-pvc
+      containers:
+        - name: minecraft-java
+          image: itzg/minecraft-server
+          ports:
+            - containerPort: {{ mc_java_port }}
+          volumeMounts:
+            - name: minecraft-java-data
+              mountPath: /data
+          tty: true
+          stdin: true
+          env:
+            # Game Configurations
+            - name: DEBUG
+              value: "{{ mc_java_debug | default("false", true) }}"
+            - name: OVERRIDE_SERVER_PROPERTIES
+              vale: "true"
+            - name: SERVER_NAME
+              value: "{{ mc_java_servername }}"
+            - name: SERVER_PORT
+              value: "{{ mc_java_port }}"
+            - name: MODE
+              value: "{{ mc_java_mode }}"
+            - name: MOTD
+              value: "{{ mc_java_moto }}"
+            - name: DIFFICULTY
+              value: "{{ mc_java_difficulty }}"
+            - name: WHITELIST
+              value: "{{ mc_java_whitelist }}"
+            - name: ENFORCE_WHITELIST
+              value: "TRUE"
+            - name: OPS
+              value: "{{ mc_java_ops }}"
+            - name: OVERRIDE_OPS
+              value: "TRUE"
+            - name: MAX_PLAYERS
+              value: "{{ mc_java_maxplayers }}"
+            - name: DEFAULT_PLAYER_PERMISSION_LEVEL
+              value: "visitor"
+            - name: FORCE_GAMEMODE
+              value: "true"
+            - name: EULA
+              value: "TRUE"
+            - name: ENABLE_RCON
+              value: "false"
+            - name: RCON_PASSWORD
+              value: "{{mc_java_rcon_passwd }}"
+            - name: PVP
+              value: "{{ mc_java_pvp }}"
+            - name: ENABLE_ROLLING_LOGS
+              value: "true"
+            - name: GENERATE_STRUCTURES
+              value: "true"
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: MEMORY
+              value: "{{ mc_java_heapmem }}"
+            - name: ENABLE_COMMAND_BLOCK
+              value: "true"

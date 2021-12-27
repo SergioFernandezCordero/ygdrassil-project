@@ -27,7 +27,7 @@ aenea_version: develop
 aenea_dbpath: /var/aenea-db
 aenea_loglevel: DEBUG
 
-# Minecraft
+# Minecraft Bedrock
 
 mc_heapmem: "2G"
 mc_debug: "true"
@@ -40,3 +40,17 @@ mc_maxplayers: "10"
 mc_ops: "2535438222925699"
 mc_members: "2535438222925699"
 mc_whitelist: "HitchHicker4502"
+
+# Minecraft Java
+
+mc_java_heapmem: "2G"
+mc_java_debug: "true"
+mc_java_servername: "YGDRASSIL-TST"
+mc_java_port: "19132"
+mc_java_moto: "Ygrdassil Minecraft Test Server"
+mc_java_mode: "creative"
+mc_java_difficulty: "easy"
+mc_java_maxplayers: "10"
+mc_java_ops: "2535438222925699"
+mc_java_members: "2535438222925699"
+mc_java_whitelist: "HitchHicker4502"
