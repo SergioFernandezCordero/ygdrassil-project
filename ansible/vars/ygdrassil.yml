@@ -227,7 +227,7 @@ mc_java_maxplayers: "10"
 mc_java_ops: "AstroHitchHikker,Love_Erilin"
 mc_java_members: "95cec11e-b2d0-484d-99b1-b12e5f31fc5a,69d51028-6889-4b09-9d3f-ff01c153da22"
 mc_java_whitelist: "AstroHitchHikker,Love_Erilin"
-mc_java_pvp: "TRUE"
+mc_java_pvp: "FALSE"
 mc_java_rcon_passwd: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           32306238616434336539376238356237383135316633666365646265363232663861306565333836
