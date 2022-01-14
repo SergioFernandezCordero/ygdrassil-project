@@ -117,7 +117,7 @@ spec:
               value: "true"
             - name: TYPE
               value: "{{ mc_java_server_type }}"
-            {% if mc_java_server_type is "SPIGOT" %}
+{% if mc_java_server_type == "SPIGOT" %}
             - name: SPIGET_RESOURCES
               value: "{{ mc_java_spigot_plugins|join(',') }}"
-            {% end if %}
+{% endif %}
