@@ -115,3 +115,7 @@ spec:
               value: "{{ mc_java_heapmem }}"
             - name: ENABLE_COMMAND_BLOCK
               value: "true"
+            - name: TYPE
+              value: "SPIGOT"
+            - name: SPIGET_RESOURCES
+              value: "{{ mc_java_spigot_plugins|join(',') }}"
