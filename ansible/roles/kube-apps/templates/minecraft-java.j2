@@ -116,6 +116,8 @@ spec:
             - name: ENABLE_COMMAND_BLOCK
               value: "true"
             - name: TYPE
-              value: "SPIGOT"
+              value: "{{ mc_java_server_type }}"
+            {% if mc_java_server_type is "SPIGOT" %}
             - name: SPIGET_RESOURCES
               value: "{{ mc_java_spigot_plugins|join(',') }}"
+            {% end if %}
