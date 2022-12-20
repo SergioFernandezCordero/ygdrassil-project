@@ -56,7 +56,7 @@ spec:
             - containerPort: 2368
           env:
             - name: url
-              value: "{{ sergio_url }}"
+              value: {{sergio_scheme }}://{{ sergio_url }}
             - name: database__client
               value: sqlite3
             - name: database__connection__filename

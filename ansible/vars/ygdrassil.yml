@@ -241,6 +241,6 @@ mc_java_spigot_plugins:
   - 38851 # surface
 
 # Sergio Web 
-sergio_url: https://sergio.fernandezcordero.net
+sergio_url: sergio.fernandezcordero.net
 sergio_scheme: "https"
 sergio_port: "80"

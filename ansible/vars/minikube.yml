@@ -56,6 +56,6 @@ mc_java_members: "2535438222925699"
 mc_java_whitelist: "HitchHicker4502"
 
 # Sergio Web 
-sergio_url: "http://localhost"
+sergio_url: "localhost"
 sergio_scheme: "http"
 sergio_port: "8080"
