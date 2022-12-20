@@ -5,6 +5,8 @@ all:
       hosts:
         localhost:
           ansible_connection: local
+          ansible_user: "{{ lookup('ansible.builtin.env', 'USER') }}"
+          ansible_python_interpreter: '{{ ansible_playbook_python }}'
           ansible_become_password: !vault |
             $ANSIBLE_VAULT;1.1;AES256
             62633763326534316564313936356133306133616631303732383166636231376534303261366434

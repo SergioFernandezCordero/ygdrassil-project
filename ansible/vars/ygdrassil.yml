@@ -239,3 +239,8 @@ mc_java_server_type: "SPIGOT"
 mc_java_spigot_plugins:
   - 64270 # tpa plugin
   - 38851 # surface
+
+# Sergio Web 
+sergio_url: https://sergio.fernandezcordero.net
+sergio_scheme: "https"
+sergio_port: "80"
