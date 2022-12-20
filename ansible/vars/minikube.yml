@@ -20,7 +20,7 @@ aenea_token: !vault |
           35333038623431653261323639323439623037313034616238663161653861326663623837313534
           65653233633166323430626138313337646631356537633431373838633366383138376666613930
           333663323662373665653166323563383866
-aenea_botname: AeneaBot
+aenea_botname: AeneaBot-tst
 aenea_authuser: ElAutoestopista
 aenea_lang: es
 aenea_version: develop
@@ -54,3 +54,8 @@ mc_java_maxplayers: "10"
 mc_java_ops: "2535438222925699"
 mc_java_members: "2535438222925699"
 mc_java_whitelist: "HitchHicker4502"
+
+# Sergio Web 
+sergio_url: "localhost"
+sergio_scheme: "http"
+sergio_port: "8080"
