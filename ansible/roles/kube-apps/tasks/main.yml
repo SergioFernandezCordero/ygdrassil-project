@@ -53,3 +53,8 @@
   include_tasks: minecraft-java.yml
   tags:
     - minecraft-java
+
+- name: Deploy PQMC Memorial
+  include_tasks: pqmc.yml
+  tags:
+    - pqmc

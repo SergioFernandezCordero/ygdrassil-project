@@ -59,3 +59,8 @@ mc_java_whitelist: "HitchHicker4502"
 sergio_url: "localhost"
 sergio_scheme: "http"
 sergio_port: "8080"
+
+# Sergio Web 
+pqmc_url: "localhost"
+pqmc_scheme: "http"
+pqmc_port: "8090"
