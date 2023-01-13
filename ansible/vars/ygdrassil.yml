@@ -244,3 +244,8 @@ mc_java_spigot_plugins:
 sergio_url: sergio.fernandezcordero.net
 sergio_scheme: "https"
 sergio_port: "80"
+
+# PQMC Web 
+pqmc_url: www.proyectopqmc.com
+pqmc_scheme: "https"
+pqmc_port: "80"
