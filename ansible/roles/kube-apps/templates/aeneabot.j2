@@ -7,6 +7,14 @@ type: Opaque
 data:
   token: {{ aenea_token }}
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: chatgpttoken
+type: Opaque
+data:
+  token: {{ aenea_chatgpt_token }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -42,3 +50,12 @@ spec:
               secretKeyRef:
                 name: aeneatoken
                 key: token
+          - name: CHATGPTTOKEN
+            valueFrom:
+              secretKeyRef:
+                name: chatgpttoken
+                key: token
+          - name: CHATGPTPERSON
+            value: {{ aenea_chatgpt_personality| default('Professional', true) }}
+          - name: CHATGPTMODEL
+            value: {{ aenea_chatgpt_model| default('text-davinci-003', true) }}
