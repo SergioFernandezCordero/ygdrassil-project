@@ -1,0 +1,85 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: raponchi-consumer-key
+type: Opaque
+data:
+  token: {{ raponchi_consumer_key }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: raponchi-consumer-secret
+type: Opaque
+data:
+  token: {{ raponchi_consumer_secret }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: raponchi-access-token
+type: Opaque
+data:
+  token: {{ raponchi_access_token }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: raponchi-access-secret
+type: Opaque
+data:
+  token: {{ raponchi_access_secret }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: raponchi
+spec:
+  selector:
+    matchLabels:
+      app: raponchi
+  template:
+    metadata:
+      labels:
+        app: raponchi
+    spec:
+      containers:
+        - name: raponchi
+          image: elautoestopista/raponchi:{{ raponchi_version | default('latest', true) }}
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001   
+          env:
+          - name: PATH_TO_FROGS
+            value: {{ raponchi_path }}
+          - name: FROG_NUMBER
+            value: "{{ raponchi_number }}"
+          - name: FROG_SCHEDULER_INTERVAL
+            value: "{{ raponchi_scheduler_interval }}"
+          - name: FROG_NAMES_URL
+            value: {{ raponchi_names_url }}
+          - name: LOGLEVEL
+            value: {{ raponchi_loglevel | default('INFO', true) }}
+          - name: TW_CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: raponchi-consumer-key
+                key: token
+          - name: TW_CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: raponchi-consumer-secret
+                key: token
+          - name: TW_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: raponchi-access-token
+                key: token
+          - name: TW_ACCESS_TOKEN_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: raponchi-access-secret
+                key: token

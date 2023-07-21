@@ -1,0 +1,34 @@
+---
+
+- block:
+  - name: Create temporary directory for Raponchi
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_raponchi
+    register: k8s_raponchi
+
+  - name: "Upload ingress definitions to {{ k8s_raponchi.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/raponchi.j2', dest: '{{ k8s_raponchi.path }}/raponchi.yml' }
+
+  - name: Run Raponchi app
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_raponchi.path }}/raponchi.yml"
+
+  always:
+    - name: Tempdir cleanup
+      file:
+        state: absent
+        path: "{{ k8s_raponchi.path }}"
+
+  tags:
+    - raponchi
