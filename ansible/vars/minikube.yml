@@ -77,3 +77,14 @@ sergio_port: "8080"
 pqmc_url: "localhost"
 pqmc_scheme: "http"
 pqmc_port: "8090"
+
+# Raponchi, ya sabes, el de La Rwana Wey
+raponchi_path: "dataset"
+raponchi_number: 30
+raponchi_scheduler_interval: 3600
+raponchi_names_url: "https://raw.githubusercontent.com/olea/lemarios/master/nombres-propios-es.txt"
+raponchi_loglevel: "info"
+raponchi_consumer_key:
+raponchi_consumer_secret:
+raponchi_access_token:
+raponchi_access_secret:
