@@ -6,7 +6,7 @@
       path: "/home/{{ master_user }}"
       state: directory
       suffix: _k8s_raponchi
-    register: k8s_aeneabot
+    register: k8s_raponchi
 
   - name: "Upload ingress definitions to {{ k8s_raponchi.path }}"
     become: yes
