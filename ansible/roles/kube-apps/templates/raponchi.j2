@@ -53,16 +53,16 @@ spec:
             runAsGroup: 1001
             fsGroup: 1001   
           env:
-          - name: PATH_TO_FROGS
-            value: {{ raponchi_path }}
+          - name: TIMEZONE
+            value: "Europe/Berlin"
           - name: FROG_NUMBER
             value: "{{ raponchi_number }}"
           - name: FROG_SCHEDULER_INTERVAL
             value: "{{ raponchi_scheduler_interval }}"
           - name: FROG_NAMES_URL
-            value: {{ raponchi_names_url }}
+            value: "{{ raponchi_names_url }}"
           - name: LOGLEVEL
-            value: {{ raponchi_loglevel | default('INFO', true) }}
+            value: "{{ raponchi_loglevel | default('INFO', true) }}"
           - name: TW_CONSUMER_KEY
             valueFrom:
               secretKeyRef:
