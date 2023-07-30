@@ -30,6 +30,31 @@ metadata:
 type: Opaque
 data:
   token: {{ raponchi_access_secret }}
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: raponchi-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 1Gi
+  hostPath: 
+    path: /mnt/raponchi
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: raponchi-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  storageClassName: local-storage
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,6 +84,10 @@ spec:
             value: "{{ raponchi_number }}"
           - name: FROG_SCHEDULER_INTERVAL
             value: "{{ raponchi_scheduler_interval }}"
+          - name: FROG_SCHEDULER_RUN_NOW
+            value: "{{ raponchi_run_now | default('False', true) }}"
+          - name: PATH_TO_FROGS
+            value: "/opt/raponchi/{{ raponchi_path | default('dataset', true) }}"
           - name: FROG_NAMES_URL
             value: "{{ raponchi_names_url }}"
           - name: LOGLEVEL
@@ -83,3 +112,10 @@ spec:
               secretKeyRef:
                 name: raponchi-access-secret
                 key: token
+          volumeMounts:
+            - name: raponchi-storage
+              mountPath: /opt/raponchi/{{ raponchi_path | default('dataset', true) }}
+      volumes:
+        - name: raponchi-storage
+          persistentVolumeClaim: 
+            claimName: raponchi-pvc
