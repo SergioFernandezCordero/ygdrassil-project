@@ -80,9 +80,10 @@ pqmc_port: "8090"
 
 # Raponchi, ya sabes, el de La Rwana Wey
 raponchi_version: develop
-raponchi_path: "dataset"
+raponchi_path: "raponchidir"
 raponchi_number: 30
 raponchi_scheduler_interval: 3600
+raponchi_run_now: "True"
 raponchi_names_url: "https://raw.githubusercontent.com/olea/lemarios/master/nombres-propios-es.txt"
 raponchi_loglevel: "INFO"
 raponchi_consumer_key: !vault |
