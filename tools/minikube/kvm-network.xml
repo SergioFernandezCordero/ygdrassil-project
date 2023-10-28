@@ -1,0 +1,16 @@
+<network>
+  <name>mk-minikube</name>
+  <uuid>dd003388-df77-4f38-8c8c-074efb16448d</uuid>
+  <forward dev="wlps03" mode="route">
+    <interface dev="wlps03"/>
+  </forward>
+  <bridge name="virbr0" stp="on" delay="0"/>
+  <mac address="52:54:00:34:eb:ab"/>
+  <domain name="minikube"/>
+  <ip address="192.168.100.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.100.128" end="192.168.100.254"/>
+    </dhcp>
+  </ip>
+</network>
+
