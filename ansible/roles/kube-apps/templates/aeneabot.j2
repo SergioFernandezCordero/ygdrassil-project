@@ -14,6 +14,31 @@ metadata:
 type: Opaque
 data:
   token: {{ aenea_chatgpt_token }}
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: aeneabot-pv
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 1Gi
+  hostPath: 
+    path: /mnt/aeneadb
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: aeneabot-pvc
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  storageClassName: local-storage
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,14 +53,14 @@ spec:
       labels:
         app: aeneabot
     spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
       containers:
         - name: aeneabot
           image: elautoestopista/aeneabot:{{ aenea_version | default('latest', true) }}
           imagePullPolicy: Always
-          securityContext:
-            runAsUser: 1001
-            runAsGroup: 1001
-            fsGroup: 1001   
           env:
           - name: BOTNAME
             value: {{ aenea_botname }}
@@ -44,7 +69,9 @@ spec:
           - name: LANG
             value: {{ aenea_lang }}
           - name: LOGLEVEL
-            value: {{ aenea_loglevel| default('INFO', true) }}
+            value: {{ aenea_loglevel | default('INFO', true) }}
+          - name: AENEADB
+            value: {{ aenea_dbpath | default('/sqlite', true) }}
           - name: TOKEN
             valueFrom:
               secretKeyRef:
@@ -59,3 +86,10 @@ spec:
             value: {{ aenea_chatgpt_personality| default('Professional', true) }}
           - name: CHATGPTMODEL
             value: {{ aenea_chatgpt_model| default('text-davinci-003', true) }}
+          volumeMounts:
+            - name: aeneabot-storage
+              mountPath: {{ aenea_dbpath | default('dataset', true) }}
+      volumes:
+        - name: aeneabot-storage
+          persistentVolumeClaim: 
+            claimName: aeneabot-pvc

@@ -24,8 +24,8 @@ aenea_botname: AeneaBot-tst
 aenea_authuser: ElAutoestopista
 aenea_lang: es
 aenea_version: develop
-aenea_dbpath: /var/aenea-db
-aenea_loglevel: DEBUG
+aenea_dbpath: /opt/aenea/aeneadb
+aenea_loglevel: INFO
 aenea_chatgpt_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           35376133643230613766316233383132383235393563393232396663356161316235303733343633
