@@ -37,7 +37,7 @@ aenea_chatgpt_token: !vault |
           32643934393130653939323863653639393033396336353764326465303461386332356239393865
           35363463363363373862
 aenea_chatgpt_personality: Sassy
-aenea_chatgpt_model: text-davinci-003
+aenea_chatgpt_model: gpt-3.5-turbo
 
 
 # Minecraft Bedrock
