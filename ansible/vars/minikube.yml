@@ -39,6 +39,8 @@ aenea_chatgpt_token: !vault |
 aenea_chatgpt_personality: Sassy
 aenea_chatgpt_model: text-davinci-003
 
+# AeneaAI parameters
+aeneaai_version: develop
 
 # Minecraft Bedrock
 

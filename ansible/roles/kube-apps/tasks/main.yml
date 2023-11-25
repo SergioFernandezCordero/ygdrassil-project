@@ -9,6 +9,11 @@
   tags:
     - aeneabot
 
+- name: Deploy AenaAI
+  include_tasks: aeneaai.yml
+  tags:
+    - aeneaai
+
 - name: Deploy Metrics service
   include_tasks: metrics.yml
   tags:

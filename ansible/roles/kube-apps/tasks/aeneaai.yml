@@ -1,0 +1,34 @@
+---
+
+- block:
+  - name: Create temporary directory for AeneaAI
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_aeneaai
+    register: k8s_aeneaai
+
+  - name: "Upload ingress definitions to {{ k8s_aeneaai.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/aeneaai.j2', dest: '{{ k8s_aeneaai.path }}/aeneaai.yml' }
+
+  - name: Run AeneaAI app
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_aeneaai.path }}/aeneaai.yml"
+
+  always:
+    - name: Tempdir cleanup
+      file:
+        state: absent
+        path: "{{ k8s_aeneaai.path }}"
+
+  tags:
+    - aeneaai
