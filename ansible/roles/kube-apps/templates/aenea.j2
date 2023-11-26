@@ -43,21 +43,24 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aeneabot
+  name: aenea
 spec:
   selector:
     matchLabels:
-      app: aeneabot
+      app: aenea
   template:
     metadata:
       labels:
-        app: aeneabot
+        app: aenea
     spec:
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
       containers:
+        - name: aeneaai
+          image: elautoestopista/aeneaai:{{ aeneaai_version | default('latest', true) }}
+          imagePullPolicy: Always
         - name: aeneabot
           image: elautoestopista/aeneabot:{{ aenea_version | default('latest', true) }}
           imagePullPolicy: Always
@@ -77,15 +80,10 @@ spec:
               secretKeyRef:
                 name: aeneatoken
                 key: token
-          - name: CHATGPTTOKEN
-            valueFrom:
-              secretKeyRef:
-                name: chatgpttoken
-                key: token
-          - name: CHATGPTPERSON
-            value: {{ aenea_chatgpt_personality| default('Professional', true) }}
-          - name: CHATGPTMODEL
-            value: {{ aenea_chatgpt_model| default('text-davinci-003', true) }}
+          - name: OLLAMA_URL
+            value: 'http://localhost:11434'
+          - name: OLLAMA_MODEL
+            value: 'aenea'
           volumeMounts:
             - name: aeneabot-storage
               mountPath: {{ aenea_dbpath | default('dataset', true) }}

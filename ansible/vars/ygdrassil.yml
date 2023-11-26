@@ -213,6 +213,9 @@ aenea_chatgpt_token: !vault |
 aenea_chatgpt_personality: sassy 
 aenea_chatgpt_model: text-davinci-003
 
+# AeneaAI parameters
+aeneaai_version: 0.1
+
 # Minecraft
 
 mc_heapmem: "2G"

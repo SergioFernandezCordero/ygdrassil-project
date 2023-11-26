@@ -38,12 +38,9 @@ aenea_chatgpt_token: !vault |
           35363463363363373862
 aenea_chatgpt_personality: Sassy
 aenea_chatgpt_model: text-davinci-003
-
-# AeneaAI parameters
 aeneaai_version: develop
 
 # Minecraft Bedrock
-
 mc_heapmem: "2G"
 mc_debug: "true"
 mc_servername: "YGDRASSIL-TST"
