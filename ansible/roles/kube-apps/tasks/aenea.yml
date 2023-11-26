@@ -1,14 +1,14 @@
 ---
 
 - block:
-  - name: Create temporary directory for Aenea
+  - name: "Create temporary directory for Aenea"
     tempfile:
       path: "/home/{{ master_user }}"
       state: directory
       suffix: _k8s_aeneabot
     register: k8s_aeneabot
 
-  - name: "Upload ingress definitions to {{ k8s_aeneabot.path }}"
+  - name: "Upload Deployment definition to {{ k8s_aeneabot.path }}"
     become: yes
     template:
       src: "{{ item.src }}"
@@ -16,19 +16,19 @@
       owner: "{{ master_user }}"
       group: "{{ master_group }}"
     with_items:
-      - { src: 'templates/aeneabot.j2', dest: '{{ k8s_aeneabot.path }}/aeneabot.yml' }
+      - { src: 'templates/aenea.j2', dest: '{{ k8s_aeneabot.path }}/aenea.yml' }
 
-  - name: Run Aeneabot app
+  - name: "Run Aenea"
     k8s:
       namespace: default
       state: present
-      src: "{{ k8s_aeneabot.path }}/aeneabot.yml"
+      src: "{{ k8s_aeneabot.path }}/aenea.yml"
 
   always:
-    - name: Tempdir cleanup
+    - name: "Tempdir cleanup"
       file:
         state: absent
         path: "{{ k8s_aeneabot.path }}"
 
   tags:
-    - aeneabot
+    - aenea

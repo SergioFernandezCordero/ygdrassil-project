@@ -4,10 +4,10 @@
   tags:
     - traefik
 
-- name: Deploy AenaBot
-  include_tasks: aeneabot.yml
+- name: Deploy Aena
+  include_tasks: aenea.yml
   tags:
-    - aeneabot
+    - aenea
 
 - name: Deploy Metrics service
   include_tasks: metrics.yml
