@@ -197,7 +197,7 @@ aenea_token: !vault |
 aenea_botname: AeneaBot
 aenea_authuser: ElAutoestopista
 aenea_lang: es
-aenea_version: 4.0.0
+aenea_version: 4.0.1
 aenea_dbpath: /opt/aenea/aeneadb
 aenea_loglevel: INFO
 aeneaai_version: 0.1
