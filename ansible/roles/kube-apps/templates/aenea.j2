@@ -8,14 +8,6 @@ data:
   token: {{ aenea_token }}
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: chatgpttoken
-type: Opaque
-data:
-  token: {{ aenea_chatgpt_token }}
---- 
-apiVersion: v1
 kind: PersistentVolume
 metadata: 
   name: aeneabot-pv
