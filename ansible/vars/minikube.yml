@@ -28,34 +28,7 @@ aenea_dbpath: /opt/aenea/aeneadb
 aenea_loglevel: INFO
 aeneaai_version: develop
 
-# Minecraft Bedrock
-mc_heapmem: "2G"
-mc_debug: "true"
-mc_servername: "YGDRASSIL-TST"
-mc_port: "19132"
-mc_moto: "Ygrdassil Minecraft Test Server"
-mc_mode: "creative"
-mc_difficulty: "easy"
-mc_maxplayers: "10"
-mc_ops: "2535438222925699"
-mc_members: "2535438222925699"
-mc_whitelist: "HitchHicker4502"
-
-# Minecraft Java
-
-mc_java_heapmem: "2G"
-mc_java_debug: "true"
-mc_java_servername: "YGDRASSIL-TST"
-mc_java_port: "19132"
-mc_java_moto: "Ygrdassil Minecraft Test Server"
-mc_java_mode: "creative"
-mc_java_difficulty: "easy"
-mc_java_maxplayers: "10"
-mc_java_ops: "2535438222925699"
-mc_java_members: "2535438222925699"
-mc_java_whitelist: "HitchHicker4502"
-
-# Sergio Web 
+# Sergio Web
 sergio_url: "localhost"
 sergio_scheme: "http"
 sergio_port: "8080"
