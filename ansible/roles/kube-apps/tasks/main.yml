@@ -9,50 +9,10 @@
   tags:
     - aenea
 
-- name: Deploy Metrics service
-  include_tasks: metrics.yml
-  tags:
-    - metrics
-
-- name: Deploy Dashboard service
-  include_tasks: dashboard.yml
-  tags:
-    - dashboard
-
-- name: Deploy Jaeger service
-  include_tasks: jaeger.yml
-  tags:
-    - jaeger
-
 - name: Deploy Sergio web service
   include_tasks: sergio.yml
   tags:
     - sergio
-
-- name: Deploy Jenkins service 
-  include_tasks: jenkins.yml
-  tags:
-    - jenkins
-
-- name: Deploy whoami test service
-  include_tasks: whoami.yml
-  tags:
-    - whoami
-
-- name: Deploy Impostor AmongUs Server
-  include_tasks: impostor.yml
-  tags:
-    - impostor
-
-- name: Deploy Minecraft Bedrock Server
-  include_tasks: minecraft.yml
-  tags:
-    - minecraft
-
-- name: Deploy Minecraft Java Server
-  include_tasks: minecraft-java.yml
-  tags:
-    - minecraft-java
 
 - name: Deploy PQMC Memorial
   include_tasks: pqmc.yml
