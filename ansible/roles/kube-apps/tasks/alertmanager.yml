@@ -1,0 +1,35 @@
+---
+
+- block:
+  - name: "Create temporary directory for Alertmanager"
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_alertmanager
+    register: k8s_alertmanager
+
+  - name: "Upload Deployment definition to {{ k8s_alertmanager.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/alertmanager.j2', dest: '{{ k8s_alertmanager.path }}/alertmanager.yml' }
+
+  - name: "Run Alertmanager"
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_alertmanager.path }}/alertmanager.yml"
+
+  always:
+    - name: "Tempdir cleanup"
+      file:
+        state: absent
+        path: "{{ k8s_alertmanager.path }}"
+
+  tags:
+    - alertmanager
+    - monitoring

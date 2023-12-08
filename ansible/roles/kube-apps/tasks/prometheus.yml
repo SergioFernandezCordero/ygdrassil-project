@@ -1,0 +1,103 @@
+---
+
+- block:
+  - name: "Create temporary directory for Prometheus Bootstrap"
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_prometheus
+    register: k8s_prometheus
+
+  - name: "Upload Deployment definition to {{ k8s_prometheus.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/prometheus.j2', dest: '{{ k8s_prometheus.path }}/prometheus.yml' }
+
+  - name: "Run Prometheus Bootstrap"
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_prometheus.path }}/prometheus.yml"
+
+  always:
+    - name: "Tempdir cleanup"
+      file:
+        state: absent
+        path: "{{ k8s_prometheus.path }}"
+
+  tags:
+    - prometheus
+    - monitoring
+
+- block:
+  - name: "Create temporary directory for Prometheus Node-Exporter"
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_prome
+    register: k8s_prome
+
+  - name: "Upload Deployment definition to {{ k8s_prome.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/node-exporter.j2', dest: '{{ k8s_prome.path }}/node-exporter.yml' }
+
+  - name: "Run Prometheus Node-Exporter"
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_prome.path }}/node-exporter.yml"
+
+  always:
+    - name: "Tempdir cleanup"
+      file:
+        state: absent
+        path: "{{ k8s_prome.path }}"
+
+  tags:
+    - prometheus_node_exporter
+    - monitoring
+
+- block:
+  - name: "Create temporary directory for Prometheus Bootstrap"
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_promeboot
+    register: k8s_promeboot
+
+  - name: "Upload Deployment definition to {{ k8s_promeboot.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/prometheus-bootstrap.j2', dest: '{{ k8s_promeboot.path }}/prometheus-bootstrap.yml' }
+
+  - name: "Run prometheus"
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_promeboot.path }}/prometheus-bootstrap.yml"
+
+  always:
+    - name: "Tempdir cleanup"
+      file:
+        state: absent
+        path: "{{ k8s_promeboot.path }}"
+
+  tags:
+    - prometheus_bootstrap
+    - monitoring
