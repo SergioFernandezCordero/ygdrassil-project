@@ -19,6 +19,11 @@
   tags:
     - prometheus
 
+- name: Deploy Prometheus Node-Exporter
+  include_tasks: prometheus.yml
+  tags:
+    - prometheus_node_exporter
+
 - name: Deploy Alertmanager Config
   include_tasks: alertmanager.yml
   tags:
