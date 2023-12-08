@@ -9,6 +9,26 @@
   tags:
     - aenea
 
+- name: Deploy Prometheus Bootstrap
+  include_tasks: prometheus-bootstrap.yml
+  tags:
+    - prometheus_bootstrap
+
+- name: Deploy Prometheus Config
+  include_tasks: prometheus.yml
+  tags:
+    - prometheus
+
+- name: Deploy Alertmanager Config
+  include_tasks: alertmanager.yml
+  tags:
+    - alertmanager
+
+- name: Deploy Grafana
+  include_tasks: grafana.yml
+  tags:
+    - grafana
+
 - name: Deploy Sergio web service
   include_tasks: sergio.yml
   tags:

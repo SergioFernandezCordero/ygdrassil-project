@@ -38,6 +38,12 @@ pqmc_url: "localhost"
 pqmc_scheme: "http"
 pqmc_port: "8090"
 
+## Monitoring ##
+# Prometheus
+prometheus_url: "localhost"
+prometheus_scheme: "http"
+prometheus_port: "8100"
+
 # Raponchi, ya sabes, el de La Rwana Wey
 raponchi_version: develop
 raponchi_path: "raponchidir"

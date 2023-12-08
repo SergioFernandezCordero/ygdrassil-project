@@ -109,6 +109,16 @@ pqmc_url: www.proyectopqmc.com
 pqmc_scheme: "https"
 pqmc_port: "80"
 
+## Monitoring ##
+# Prometheus
+prometheus_url: prometheus.proyectopqmc.com
+prometheus_scheme: "https"
+prometheus_port: "80"
+# Alertmanager
+alertmanager_url: alertmanager.proyectopqmc.com
+alertmanager_scheme: "https"
+alertmanager_port: "80"
+
 # Raponchi, ya sabes, el de La Rwana Wey
 raponchi_version: 0.1.4
 raponchi_path: "raponchidir"
