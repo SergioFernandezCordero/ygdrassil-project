@@ -118,6 +118,10 @@ prometheus_port: "80"
 alertmanager_url: alertmanager.proyectopqmc.com
 alertmanager_scheme: "https"
 alertmanager_port: "80"
+# Grafana
+grafana_url: grafana.proyectopqmc.com
+grafana_scheme: "https"
+grafana_port: "80"
 
 # Raponchi, ya sabes, el de La Rwana Wey
 raponchi_version: 0.1.4

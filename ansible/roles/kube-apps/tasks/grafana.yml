@@ -1,0 +1,35 @@
+---
+
+- block:
+  - name: "Create temporary directory for Grafana"
+    tempfile:
+      path: "/home/{{ master_user }}"
+      state: directory
+      suffix: _k8s_grafana
+    register: k8s_grafana
+
+  - name: "Upload Deployment definition to {{ k8s_grafana.path }}"
+    become: yes
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ master_user }}"
+      group: "{{ master_group }}"
+    with_items:
+      - { src: 'templates/grafana.j2', dest: '{{ k8s_grafana.path }}/grafana.yml' }
+
+  - name: "Run Grafana"
+    k8s:
+      namespace: default
+      state: present
+      src: "{{ k8s_grafana.path }}/grafana.yml"
+
+  always:
+    - name: "Tempdir cleanup"
+      file:
+        state: absent
+        path: "{{ k8s_grafana.path }}"
+
+  tags:
+    - grafana
+    - monitoring
