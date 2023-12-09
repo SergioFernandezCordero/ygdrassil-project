@@ -76,29 +76,6 @@ kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/
 kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes_allow_pods_on_master: true
 
-# Helm
-helm_version: 3.2.1
-
-# Aeneabot
-aenea_token: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          30363034353535336534653035613332356331313564653038303433623131643961313033343538
-          3037363462643037363466343839313566376362623330620a653663303533306130396663386638
-          65346462373538393965326637323239663664343964306463613933616566626138346331646465
-          3736363061323166610a346663653439393435383138616664616663653063386433323865316332
-          65366231623061363232353331613861396338376439656561613061643363333336346531343266
-          32653061373837363231656530316534383231383030656339323632323331363430346133333132
-          366466393535396237626638616666643362
-aenea_botname: AeneaBot
-aenea_authuser: ElAutoestopista
-aenea_lang: es
-aenea_version: 4.0.1
-aenea_dbpath: /opt/aenea/aeneadb
-aenea_loglevel: INFO
-
-# AeneaAI parameters
-aeneaai_version: 0.1
-
 # Sergio Web
 sergio_url: sergio.fernandezcordero.net
 sergio_scheme: "https"

@@ -4,11 +4,6 @@
   tags:
     - traefik
 
-- name: Deploy Aena
-  include_tasks: aenea.yml
-  tags:
-    - aenea
-
 - name: Deploy Prometheus Bootstrap
   include_tasks: prometheus-bootstrap.yml
   tags:
