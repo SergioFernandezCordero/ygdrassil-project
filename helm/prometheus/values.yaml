@@ -1,6 +1,4 @@
 # Default values for prometheus.
-Release:
-  Namespace: monitoring
 appname: prometheus
 url: prometheus.proyectopqmc.com
 service:

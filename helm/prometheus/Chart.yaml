@@ -1,5 +1,5 @@
 apiVersion: v2
-name: Deployment of Prometheus Service
+name: prometheus-service
 version: 0.1.0
 description: Deployment of Prometheus Service
 type: application
