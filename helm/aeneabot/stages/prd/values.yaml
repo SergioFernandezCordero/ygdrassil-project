@@ -1,0 +1,46 @@
+## Default values for aeneabot.
+## Deployment
+appname: aeneabot
+# Resources allocation for Aenea AI container
+ai:
+  version: 0.1
+  deployment:
+    req:
+      cpu: 100m
+      mem: 1024M
+    lim:
+      cpu: 2000m
+      mem: 2Gi
+# Resources allocation for Aenea Bot container
+bot:
+  version: 4.0.1
+  deployment:
+    req:
+      cpu: 100m
+      mem: 256M
+    lim:
+      cpu: 500m
+      mem: 512M
+# User and group to run and mount storage
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
+## Telegram Bot
+# Name of your bot
+botName: AeneaBot
+# Telegram user allowed to talk with the bot. Any other user will get a "not allowed" response
+authUser: ElAutoestopista
+# Default languange to be used by APIs, when required
+lang: ES
+# Log Level
+logLevel: INFO
+## Database and Storage
+# Path to the local SQLite Database
+dbPath: /sqlite
+# Local Cluster path which will be mounted in the container for host the SQLite Database
+localPersistentStoragePath: /mnt/aeneadb
+## Ollama AI
+# Ollama Service URL. By default the sidecar one.
+ollamaUrl: http://localhost:11434
+# Ollama Model user in the server. By default the one included with AeneaAI
+ollamaModel: aenea
