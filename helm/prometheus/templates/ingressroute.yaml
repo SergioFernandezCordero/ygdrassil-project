@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress-{{ .Values.appname }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port:   '9090'
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`{{ .Values.url }}`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: {{ .Values.appname }}-lb
+      port: {{ .Values.service.port }}
+    middlewares:
+      - name: redirect-https
+        namespace: kube-system

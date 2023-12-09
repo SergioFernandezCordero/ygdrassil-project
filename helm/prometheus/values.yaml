@@ -1,0 +1,18 @@
+# Default values for prometheus.
+Release:
+  Namespace: monitoring
+appname: prometheus
+url: prometheus.proyectopqmc.com
+service:
+  type: LoadBalancer
+  port: 80
+middleware:
+  scheme: https
+  port: 443
+deployment:
+  req:
+    cpu: 200m
+    mem: 500M
+  lim:
+    cpu: 500m
+    mem: 1Gi

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: Deployment of Prometheus Service
+version: 0.1.0
+description: Deployment of Prometheus Service
+type: application
+keywords:
+  - prometheus
+home: https://prometheus.proyectopqmc.com
+sources:
+  - https://github.com/SergioFernandezCordero/ygdrassil-project
+maintainers: # (optional)
+  - name: Sergio Fernández Cordero
+    email: sergio@fernandezcordero.net
+    url: https://sergio.fernandezcordero.net
+appVersion: 2.48.0
