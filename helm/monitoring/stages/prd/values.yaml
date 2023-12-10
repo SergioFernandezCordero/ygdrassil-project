@@ -1,0 +1,13 @@
+# Default values for ygdrassil-monitoring.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+appName: ygdrassil-monitoring
+# Decide expose services using TLS or not
+serviceSchema: "https"
+## Prometheus
+prometheusUrl: prometheus.proyectopqmc.com
+## Alertmanager
+alertmanagerUrl: alertmanager.proyectopqmc.com
+## Grafana
+grafanaUrl: grafana.proyectopqmc.com
+
