@@ -1,0 +1,32 @@
+## Default values for raponchi.
+## Deployment
+appname: raponchi
+# Resources allocation for Raponchi container
+container:
+  version: 0.1.4
+  deployment:
+    req:
+      cpu: 100m
+      mem: 256M
+    lim:
+      cpu: 150m
+      mem: 300M
+# User and group to run and mount storage
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
+## Application behaviour
+# Log Level
+logLevel: INFO
+# Time Zone
+timeZone: Europe/Berlin
+# Number of frog images to be retrieved
+frogNumber: 50
+# How frequently the scheduler will poll for pending jobs, in seconds
+frogScheduleInternal: 3600
+# Run scheduled job on start, useful in development environments
+frogSchedulerNow: False
+# Online source for frog names. Should be a URL to a plain text file with names, one per line.
+frogNamesURL: https://raw.githubusercontent.com/olea/lemarios/master/nombres-propios-es.txt
+# Temporary path where frog images will be stored.
+frogPath: raponchidir

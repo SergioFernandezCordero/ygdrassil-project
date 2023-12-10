@@ -38,8 +38,3 @@
   include_tasks: pqmc.yml
   tags:
     - pqmc
-
-- name: Deploy Raponchi Twitter tontuna
-  include_tasks: raponchi.yml
-  tags:
-    - raponchi
