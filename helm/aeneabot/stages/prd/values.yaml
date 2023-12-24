@@ -13,7 +13,7 @@ ai:
       mem: 2Gi
 # Resources allocation for Aenea Bot container
 bot:
-  version: 4.0.1
+  version: 4.1.0
   deployment:
     req:
       cpu: 100m
@@ -44,3 +44,8 @@ localPersistentStoragePath: /mnt/aeneadb
 ollamaUrl: http://localhost:11434
 # Ollama Model user in the server. By default the one included with AeneaAI
 ollamaModel: aenea
+# Prometheus Metrics Enabled
+prometheusEnabled: True
+# Prometheus Exporter port
+prometheusPort: 9900
+
