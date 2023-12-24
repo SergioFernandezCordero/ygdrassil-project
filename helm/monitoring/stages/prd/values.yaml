@@ -10,4 +10,17 @@ prometheusUrl: prometheus.proyectopqmc.com
 alertmanagerUrl: alertmanager.proyectopqmc.com
 ## Grafana
 grafanaUrl: grafana.proyectopqmc.com
-
+## Prometheus Targets
+prometheus:
+  server:
+    persistentVolume:
+      existingClaim: ygdrassil-monitoring-prometheus-server
+  extraScrapeConfigs: |
+    - job_name: aeneabot-exporter
+      scrape_interval: 2s
+      metrics_path: /
+      params:
+        module: [http_2xx]
+      static_configs:
+        - targets:
+          - http://aeneabot-svc.default.svc.cluster.local:9900
