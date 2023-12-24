@@ -12,6 +12,9 @@ alertmanagerUrl: alertmanager.proyectopqmc.com
 grafanaUrl: grafana.proyectopqmc.com
 ## Prometheus Targets
 prometheus:
+  alertmanager:
+    persistence:
+      enabled: false
   server:
     persistentVolume:
       existingClaim: ygdrassil-monitoring-prometheus-server
