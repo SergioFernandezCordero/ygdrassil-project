@@ -18,9 +18,16 @@ prometheus:
   extraScrapeConfigs: |
     - job_name: aeneabot-exporter
       scrape_interval: 2s
-      metrics_path: /
       params:
         module: [http_2xx]
+      metrics_path: /
       static_configs:
         - targets:
           - http://aeneabot-svc.default.svc.cluster.local:9900
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: aeneabot-svc.default.svc.cluster.local:9900
