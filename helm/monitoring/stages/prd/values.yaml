@@ -34,3 +34,13 @@ prometheus:
           target_label: instance
         - target_label: __address__
           replacement: aeneabot-svc.default.svc.cluster.local:9900
+grafana:
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://ygdrassil-monitoring-prometheus-server.monitoring.svc.cluster.local:80
+        access: proxy
+        isDefault: true
