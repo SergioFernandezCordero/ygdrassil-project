@@ -13,7 +13,7 @@ ai:
       mem: 2Gi
 # Resources allocation for Aenea Bot container
 bot:
-  version: 4.1.0
+  version: 4.1.1
   deployment:
     req:
       cpu: 100m
