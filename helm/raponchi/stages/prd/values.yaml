@@ -3,7 +3,6 @@
 appname: raponchi
 # Resources allocation for Raponchi container
 container:
-  version: 0.1.4
   deployment:
     req:
       cpu: 100m
@@ -20,6 +19,8 @@ securityContext:
 logLevel: INFO
 # Time Zone
 timeZone: Europe/Berlin
+# Frog Keyword
+frogWord: rain frog
 # Number of frog images to be retrieved
 frogNumber: 50
 # How frequently the scheduler will poll for pending jobs, in seconds
