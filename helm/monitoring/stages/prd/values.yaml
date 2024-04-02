@@ -10,6 +10,9 @@ prometheusUrl: prometheus.proyectopqmc.com
 alertmanagerUrl: alertmanager.proyectopqmc.com
 ## Grafana
 grafanaUrl: grafana.proyectopqmc.com
+## OpenSearch
+opensearchUrl: opensearch.proyectopqmc.com
+opensearchDashboardUrl: dashboard.proyectopqmc.com
 ## Prometheus Targets
 prometheus:
   alertmanager:
@@ -44,3 +47,8 @@ grafana:
         url: http://ygdrassil-monitoring-prometheus-server.monitoring.svc.cluster.local:80
         access: proxy
         isDefault: true
+
+opensearch:
+  persistence:
+    enabled: false
+  singleNode: true

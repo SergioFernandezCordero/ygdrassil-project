@@ -1,46 +1,50 @@
-## Default values for aeneabot.
-## Deployment
-appname: aeneabot
-# Resources allocation for Aenea AI container
-ai:
-  version: develop
-  deployment:
-    req:
-      cpu: 500m
-      mem: 512M
-    lim:
-      cpu: 1000m
-      mem: 1Gi
-# Resources allocation for Aenea Bot container
-bot:
-  version: develop
-  deployment:
-    req:
-      cpu: 100m
-      mem: 256M
-    lim:
-      cpu: 500m
-      mem: 512M
-# User and group to run and mount storage
-securityContext:
-  runAsUser: 1001
-  runAsGroup: 1001
-## Telegram Bot
-# Name of your bot
-botName: AeneaBot
-# Telegram user allowed to talk with the bot. Any other user will get a "not allowed" response
-authUser: ElAutoestopista
-# Default languange to be used by APIs, when required
-lang: ES
-# Log Level
-logLevel: INFO
-## Database and Storage
-# Path to the local SQLite Database
-dbPath: /sqlite
-# Local Cluster path which will be mounted in the container for host the SQLite Database
-localPersistentStoragePath: /opt/aeneabot/aeneadb
-## Ollama AI
-# Ollama Service URL. By default the sidecar one.
-ollamaUrl: http://localhost:11434
-# Ollama Model user in the server. By default the one included with AeneaAI
-ollamaModel: aenea
+# Default values for ygdrassil-monitoring.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+appName: ygdrassil-monitoring
+# Decide expose services using TLS or not
+serviceSchema: "http"
+## Prometheus
+prometheusUrl: prometheus.proyectopqmc.com
+## Alertmanager
+alertmanagerUrl: alertmanager.proyectopqmc.com
+## Grafana
+grafanaUrl: grafana.proyectopqmc.com
+## Prometheus Targets
+prometheus:
+  alertmanager:
+    persistence:
+      enabled: false
+  server:
+    persistentVolume:
+      existingClaim: ygdrassil-monitoring-prometheus-server
+  extraScrapeConfigs: |
+    - job_name: aeneabot-exporter
+      scrape_interval: 2s
+      params:
+        module: [http_2xx]
+      metrics_path: /
+      static_configs:
+        - targets:
+          - http://aeneabot-svc.default.svc.cluster.local:9900
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: aeneabot-svc.default.svc.cluster.local:9900
+grafana:
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://ygdrassil-monitoring-prometheus-server.monitoring.svc.cluster.local:80
+        access: proxy
+        isDefault: true
+opensearch:
+  persistence:
+    enabled: false
+  singleNode: true
