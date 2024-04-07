@@ -17,7 +17,7 @@ securityContext:
   runAsGroup: 1001
 ## Application behaviour
 # Log Level
-logLevel: INFO
+logLevel: DEBUG
 # Time Zone
 timeZone: Europe/Berlin
 # Frog Keyword
@@ -35,6 +35,6 @@ frogPath: raponchidir
 # ElasticSearch
 elkURL: opensearch-cluster-master.monitoring.svc.cluster.local
 elkPort: 9200
-elkUser: raponchi_appender
-elkTlsVerify: False
-elkIndex: raponchi-weekly-
+elkUser: admin
+elkTlsVerify: "False"
+elkIndex: raponchi-weekly-*
