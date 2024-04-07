@@ -37,4 +37,4 @@ elkURL: opensearch-cluster-master.monitoring.svc.cluster.local
 elkPort: 9200
 elkUser: admin
 elkTlsVerify: "False"
-elkIndex: raponchi-weekly-*
+elkIndex: raponchi-weekly
