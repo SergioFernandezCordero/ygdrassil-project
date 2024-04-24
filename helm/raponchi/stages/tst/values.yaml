@@ -3,7 +3,7 @@
 appname: raponchi
 # Resources allocation for Raponchi container
 container:
-  version: 0.2.0
+  version: develop
   deployment:
     req:
       cpu: 100m
@@ -17,7 +17,7 @@ securityContext:
   runAsGroup: 1001
 ## Application behaviour
 # Log Level
-logLevel: INFO
+logLevel: DEBUG
 # Time Zone
 timeZone: Europe/Berlin
 # Frog Keyword
@@ -35,6 +35,6 @@ frogPath: raponchidir
 # ElasticSearch
 elkURL: https://opensearch-cluster-master.monitoring.svc.cluster.local
 elkPort: 9200
-elkUser: raponchi_appender
+elkUser: admin
 elkTlsVerify: "False"
 elkIndex: raponchi-weekly
