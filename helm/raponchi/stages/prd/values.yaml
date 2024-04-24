@@ -3,7 +3,7 @@
 appname: raponchi
 # Resources allocation for Raponchi container
 container:
-  version: develop
+  version: 0.2.0
   deployment:
     req:
       cpu: 100m
@@ -33,8 +33,8 @@ frogNamesURL: https://raw.githubusercontent.com/olea/lemarios/master/nombres-pro
 # Temporary path where frog images will be stored.
 frogPath: raponchidir
 # ElasticSearch
-elkURL: opensearch-cluster-master.monitoring.svc.cluster.local
+elkURL: https://opensearch-cluster-master.monitoring.svc.cluster.local
 elkPort: 9200
 elkUser: raponchi_appender
-elkTlsVerify: False
-elkIndex: raponchi-weekly-
+elkTlsVerify: "False"
+elkIndex: raponchi-weekly
