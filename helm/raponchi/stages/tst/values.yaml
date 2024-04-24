@@ -33,7 +33,7 @@ frogNamesURL: https://raw.githubusercontent.com/olea/lemarios/master/nombres-pro
 # Temporary path where frog images will be stored.
 frogPath: raponchidir
 # ElasticSearch
-elkURL: opensearch-cluster-master.monitoring.svc.cluster.local
+elkURL: https://opensearch-cluster-master.monitoring.svc.cluster.local
 elkPort: 9200
 elkUser: admin
 elkTlsVerify: "False"
