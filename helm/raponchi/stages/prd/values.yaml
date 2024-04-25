@@ -21,7 +21,7 @@ logLevel: INFO
 # Time Zone
 timeZone: Europe/Berlin
 # Frog Keyword
-frogWord: rain frog
+frogWord: breviceps adspersus
 # Number of frog images to be retrieved
 frogNumber: 50
 # How frequently the scheduler will poll for pending jobs, in seconds
