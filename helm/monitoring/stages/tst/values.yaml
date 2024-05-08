@@ -46,5 +46,5 @@ grafana:
         isDefault: true
 opensearch:
   persistence:
-    enabled: false
+    enabled: true
   singleNode: true
