@@ -51,7 +51,7 @@ prometheus:
         - source_labels: [__param_target]
           target_label: instance
         - target_label: __address__
-          replacement: raponchi-prometheys-svc.default.svc.cluster.local:10090
+          replacement: raponchi-prometheus-svc.default.svc.cluster.local:10090
 grafana:
   datasources:
     datasources.yaml:
