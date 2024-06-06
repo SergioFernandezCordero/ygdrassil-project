@@ -37,3 +37,4 @@ elkPort: 9200
 elkUser: raponchi_appender
 elkTlsVerify: "False"
 elkIndex: raponchi-weekly
+prometheusPort: 10090
