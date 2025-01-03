@@ -1,5 +1,6 @@
 ansible/roles/geerlingguy.docker
 ansible/roles/geerlingguy.kubernetes
+ansible/roles/geerlingguy.containerd
 ansible/plugins/mitogen-0.2.9/ansible_mitogen/plugins/connection/__pycache__
 ansible-venv
 *.pyc
