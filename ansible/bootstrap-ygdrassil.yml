@@ -13,6 +13,7 @@
     - vars/ygdrassil.yml
   roles:
     - geerlingguy.docker
+    - geerlingguy.containerd
     - geerlingguy.kubernetes
   tasks:
     # Create link to kubernetes/admin.conf for master user usage only on master node
