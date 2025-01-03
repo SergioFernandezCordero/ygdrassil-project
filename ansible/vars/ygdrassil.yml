@@ -66,8 +66,9 @@ docker_apt_ignore_key_error: True
 docker_apt_gpg_key: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
 
 # Kubernetes stuff
-kubernetes_apt_release_channel: main
-kubernetes_apt_repository: "deb http://apt.kubernetes.io/ kubernetes-xenial {{ kubernetes_apt_release_channel }}"
+kubernetes_version: '1.28'
+kubernetes_apt_release_channel: "stable"
+kubernetes_apt_repository: "https://pkgs.k8s.io/core:/{{ kubernetes_apt_release_channel }}:/v{{ kubernetes_version }}/deb/"
 kubernetes_apt_ignore_key_error: false
 kubernetes_pod_network:
   cni: 'flannel'
