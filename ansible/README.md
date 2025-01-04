@@ -2,29 +2,28 @@
 
 1. Install dependency Ansible roles:
 ```
- ansible-galaxy role install geerlingguy.docker
- ansible-galaxy role install geerlingguy.kubernetes
  ansible-galaxy role install geerlingguy.containerd
+ ansible-galaxy role install geerlingguy.kubernetes
 ```
 
 2. Deploy credential using:
 ```
-ansible-playbook bootstrap-ygdrassil.yml --tags master-user -u root
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml --tags master-user -u root
 ```
 
 3. Bootstrap full cluster:
 ```
-ansible-playbook bootstrap-ygdrassil.yml
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml
 ```
 
 4. Bootstap only prerrequisites and accessories (fail2ban, and so):
 ```
-ansible-playbook bootstrap-ygdrassil.yml--tags bootstrap
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml--tags bootstrap
 ```
 
-5. Deploy Traefik Ingress
+5. DEPRECTAED Deploy Traefik Ingress
 ```
-ansible-playbook deploy-apps.yml --tags traefik
+Use Helm to deploy Traefik
 ```
 
 6. Enjoy deploying stuff
