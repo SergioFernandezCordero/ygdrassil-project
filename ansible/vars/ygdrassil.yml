@@ -52,30 +52,20 @@ master_email: "sergio@fernandezcordero.net"
 ygdrassil_domains:
   - proyectopqmc.com
 
-# Docker stuff
-docker_edition: 'ce'
-docker_package: "docker-{{ docker_edition }}"
-docker_package_state: present
-docker_service_state: started
-docker_service_enabled: true
-docker_restart_handler_state: restarted
-docker_apt_release_channel: stable
-docker_apt_arch: amd64
-docker_apt_repository: "deb [arch={{ docker_apt_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
-docker_apt_ignore_key_error: True
-docker_apt_gpg_key: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+# Containerd
+containerd_config_cgroup_driver_systemd: true
 
 # Kubernetes stuff
-kubernetes_version: '1.28'
+kubernetes_version: '1.32'
 kubernetes_apt_release_channel: "stable"
 kubernetes_apt_repository: "https://pkgs.k8s.io/core:/{{ kubernetes_apt_release_channel }}:/v{{ kubernetes_version }}/deb/"
 kubernetes_apt_ignore_key_error: false
 kubernetes_pod_network:
-  cni: 'flannel'
-  cidr: '10.244.0.0/16'
-kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
-kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-kubernetes_allow_pods_on_master: true
+  cni: 'calico'
+  cidr: '10.224.0.0/16'
+kubernetes_calico_manifest_file: https://projectcalico.docs.tigera.io/manifests/calico.yaml
+kubernetes_allow_pods_on_control_plane: true
+kubernetes_role: "control_plane"
 
 # Sergio Web
 sergio_url: sergio.fernandezcordero.net

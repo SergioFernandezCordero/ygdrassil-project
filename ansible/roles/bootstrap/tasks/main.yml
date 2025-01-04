@@ -80,7 +80,20 @@
       reload: yes
     tags:
       - molecule-notest
-  
+
+  - name: "Enable kernel modules required for flannel"
+    become: yes
+    modprobe:
+      name: br_netfilter
+      state: present
+
+  - name: "Persist kernel modules activation required for flannel"
+    become: yes
+    copy:
+      dest: "/etc/modules-load.d/br_netfilter.conf"
+      content: |
+        br_netfilter
+
   tags:
     - bootstrap
     - kernel
@@ -95,45 +108,15 @@
     become: yes
     package:
       name:
-        - python-setuptools
         - python3-setuptools
-        - python-pip
         - python3-pip
+        - python3-grpcio
+        - python3-yaml
+        - python3-openshift
+        - python3-pyasn1
         - fail2ban
         - apparmor
       state: present
-
-  - name: Pip upgrade pip
-    pip:
-      name:
-        - pip
-        - pyasn1
-      extra_args: --upgrade
-  
-  - name: Pip install stuff
-    pip:
-      name:
-        - pyhelm
-        - grpcio
-        - pyyaml
-        - openshift
- 
-  - name: Pip3 upgrade pip
-    pip:
-      name:
-        - pip
-        - pyasn1
-      extra_args: --upgrade
-      executable: pip3
-  
-  - name: Pip3 install stuff
-    pip:
-      name:
-        - pyhelm
-        - grpcio
-        - pyyaml
-        - openshift
-      executable: pip3
   
   tags:
     - bootstrap
@@ -174,55 +157,3 @@
   tags:
     - bootstrap
     - fail2ban
-
-- block:
-  - name: Create temp directory
-    delegate_to: 127.0.0.1
-    tempfile:
-      state: directory
-      suffix: _helm
-    register: helm_temp
-  
-  - name: "Download Helm binary in temp path {{ helm_temp.path }}"
-    delegate_to: 127.0.0.1
-    get_url:
-      url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
-      dest: "{{ helm_temp.path }}"
-
-  - name: Unarchive package in temp path
-    delegate_to: 127.0.0.1
-    unarchive:
-      src: "{{ helm_temp.path }}/helm-v{{ helm_version }}-linux-amd64.tar.gz"
-      dest: "{{ helm_temp.path }}"
-  
-  - name: Upload Helm to nodes
-    become: yes
-    copy:
-      src: "{{ helm_temp.path }}/linux-amd64/helm"
-      dest: /usr/local/bin/helm
-      owner: root
-      group: root
-      mode: 0755
-
-  - name: Install kubernetes packages with Helm
-    include_tasks: helm.yml
-    tags:
-      - bootstrap
-      - helm-packages
-      - helm
-
-  rescue:
-    - fail:
-        msg: "Something went wrong"
-
-  always:
-    - name: "Remove temporal path {{ helm_temp.path }}"
-      delegate_to: 127.0.0.1
-      file:
-        path: "{{ helm_temp.path }}"
-        state: absent
-
-  tags:
-    - bootstrap
-    - helm
-    - helm-packages

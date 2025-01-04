@@ -12,7 +12,6 @@
   vars_files:
     - vars/ygdrassil.yml
   roles:
-    - geerlingguy.docker
     - geerlingguy.containerd
     - geerlingguy.kubernetes
   tasks:
