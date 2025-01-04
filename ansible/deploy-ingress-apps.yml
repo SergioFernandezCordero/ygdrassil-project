@@ -1,7 +1,0 @@
----
-- hosts: all
-  gather_facts: true
-  vars_files:
-    - vars/ygdrassil.yml
-  roles:
-    - kube-ingress
