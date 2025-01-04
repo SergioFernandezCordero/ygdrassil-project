@@ -64,7 +64,7 @@ grafana:
       datasources:
       - name: Prometheus
         type: prometheus
-        url: http://ygdrassil-monitoring-prometheus-server.monitoring.svc.cluster.local:80
+        url: http://monitoring-prometheus-server.monitoring.svc.cluster.local:80
         access: proxy
         isDefault: true
 
