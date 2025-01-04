@@ -1,32 +1,38 @@
 ## Ygdrassil Project Deployment
 
-1. Deploy credential using:
+1. Install dependency Ansible roles:
 ```
-ansible-playbook bootstrap-ygdrassil.yml --tags master-user -u root
-```
-
-2. Bootstrap full cluster:
-```
-ansible-playbook bootstrap-ygdrassil.yml
+ ansible-galaxy role install geerlingguy.containerd
+ ansible-galaxy role install geerlingguy.kubernetes
 ```
 
-3. Bootstap only prerrequisites and accessories (fail2ban, and so):
+2. Deploy credential using:
 ```
-ansible-playbook bootstrap-ygdrassil.yml--tags bootstrap
-```
-
-4. Deploy Traefik Ingress
-```
-ansible-playbook deploy-apps.yml --tags traefik
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml --tags master-user -u root
 ```
 
-5. Enjoy deploying stuff
+3. Bootstrap full cluster:
+```
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml
+```
+
+4. Bootstap only prerrequisites and accessories (fail2ban, and so):
+```
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml--tags bootstrap
+```
+
+5. DEPRECTAED Deploy Traefik Ingress
+```
+Use Helm to deploy Traefik
+```
+
+6. Enjoy deploying stuff
 ```
 ansible-playbook -i inventory/minikube deploy-apps.yml --tags your-app # For local testing
 ansible-playbook -i inventory/ygdrassil deploy-apps.yml --tags your-app # For production
 ```
 
-6. Minikube
+7. Minikube
 
 You can access all deployments in TST Minikube using IP of Minikube node and exposed port:
 

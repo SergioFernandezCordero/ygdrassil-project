@@ -27,16 +27,16 @@ docker_apt_ignore_key_error: True
 docker_apt_gpg_key: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
 
 # Kubernetes stuff
-kubernetes_apt_release_channel: main
-kubernetes_apt_repository: "deb http://apt.kubernetes.io/ kubernetes-xenial {{ kubernetes_apt_release_channel }}"
+kubernetes_version: '1.32'
+kubernetes_apt_release_channel: "stable"
+kubernetes_apt_repository: "https://pkgs.k8s.io/core:/{{ kubernetes_apt_release_channel }}:/v{{ kubernetes_version }}/deb/"
 kubernetes_apt_ignore_key_error: false
 kubernetes_pod_network:
   cni: 'flannel'
   cidr: '10.75.0.0/24'
 kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
 kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-kubernetes_allow_pods_on_master: true
-kubernetes_role: master
+kubernetes_allow_pods_on_control_plane: true
 
 # Helm
 helm_version: 3.2.1

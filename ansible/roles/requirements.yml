@@ -1,4 +1,4 @@
-# Docker role
-- src: geerlingguy.docker
+# Containerd role
+- src: geerlingguy.containerd
 # Kubernetes role
 - src: geerlingguy.kubernetes
