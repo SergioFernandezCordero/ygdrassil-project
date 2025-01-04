@@ -19,6 +19,11 @@ prometheus:
     persistence:
       enabled: false
   server:
+    securityContext:
+      runAsUser: 1000
+      runAsNonRoot: true
+      runAsGroup: 65534
+      fsGroup: 1000
     persistentVolume:
       existingClaim: ygdrassil-monitoring-prometheus-server
   extraScrapeConfigs: |
