@@ -32,7 +32,14 @@ ansible-playbook -i inventory/minikube deploy-apps.yml --tags your-app # For loc
 ansible-playbook -i inventory/ygdrassil deploy-apps.yml --tags your-app # For production
 ```
 
-7. Minikube
+7. Deploy backups to MEGA
+This provides automatic backup of the Kubernetes PV contents deployed under /mnt in MEGA, without storing 
+your credentials in the machine.
+```
+ansible-playbook -i inventories/ygdrassil bootstrap-ygdrassil.yml --tags backup
+```
+
+8. Minikube
 
 You can access all deployments in TST Minikube using IP of Minikube node and exposed port:
 

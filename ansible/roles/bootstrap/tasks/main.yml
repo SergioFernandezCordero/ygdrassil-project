@@ -157,3 +157,76 @@
   tags:
     - bootstrap
     - fail2ban
+
+- block:
+  - name: "Install MegaCMD"
+    become: yes
+    apt:
+      deb: https://mega.nz/linux/repo/Debian_12/amd64/megacmd-Debian_12_amd64.deb
+
+  - name: "Create MEGACMD server Systemd Service"
+    become: yes
+    template:
+      src: mega-cmd-server.service.j2
+      dest: /lib/systemd/system/mega-cmd-server.service
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: "Symlink systemd unit"
+    become: yes
+    file:
+      src: /lib/systemd/system/mega-cmd-server.service
+      dest: /etc/systemd/system/multi-user.target.wants/mega-cmd-server.service
+      owner: root
+      group: root
+      mode: '0644'
+      state: link
+
+  - name: "Enable and run MEGA-CMD-SERVER"
+    become: yes
+    systemd_service:
+      daemon_reload: true
+      name: mega-cmd-server
+      enabled: true
+      state: started
+      masked: no
+
+  - name: "Login to MEGA"
+    shell: "mega-login {{ mega_user }} {{ mega_pass }}"
+
+  - name: "Ensure backup folder exists in MEGA"
+    shell: 'mega-mkdir /ygdrassil/backup -p'
+    ignore_errors: true
+
+  - name: "Define backup schedule in MEGA"
+    shell: 'mega-backup /mnt /ygdrassil/backup --period="0 0 * * * *" --num-backups=30'
+    ignore_errors: true
+
+  - name: "Request list backups defined in MEGA"
+    shell: 'mega-backup -l'
+    register: backup_list
+
+  - name: "Request history of backups in MEGA"
+    shell: 'mega-backup -h'
+    register: backup_history
+
+  - name: "List of backups defined in MEGA"
+    debug:
+      var: backup_list.stdout_lines
+
+  - name: "History of backups defined in MEGA"
+    debug:
+      var: backup_history.stdout_lines
+
+  rescue:
+    - fail:
+        msg: "Failed, please check MEGA configuration"
+
+  always:
+    - name: "Logout from MEGA"
+      shell: 'mega-logout'
+
+  tags:
+    - bootstrap
+    - backup

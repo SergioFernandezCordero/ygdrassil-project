@@ -1,0 +1,20 @@
+[Unit]
+Description=MEGAcmd server
+After=syslog.target network-online.target
+AssertFileIsExecutable=/usr/bin/mega-cmd-server
+
+[Service]
+User={{ master_user }}
+Group={{ master_group }}
+Type=simple
+WorkingDirectory=/home/ygdrassil
+ExecStart=/usr/bin/mega-cmd-server
+Restart=always
+LimitNOFILE=65536
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mega-cmd-server
+
+[Install]
+WantedBy=multi-user.target
