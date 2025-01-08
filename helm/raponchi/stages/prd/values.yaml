@@ -3,6 +3,7 @@
 appname: raponchi
 # Resources allocation for Raponchi container
 container:
+  version: 0.3.1
   deployment:
     req:
       cpu: 100m
