@@ -159,6 +159,10 @@
     - fail2ban
 
 - block:
+  - name: "Logout from all possible opened MEGA sessions"
+    shell: 'mega-logout'
+    ignore_errors: true
+
   - name: "Install MegaCMD"
     become: yes
     apt:
@@ -222,10 +226,6 @@
   rescue:
     - fail:
         msg: "Failed, please check MEGA configuration"
-
-  always:
-    - name: "Logout from MEGA"
-      shell: 'mega-logout'
 
   tags:
     - bootstrap
