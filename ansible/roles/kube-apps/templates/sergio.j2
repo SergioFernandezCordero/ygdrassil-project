@@ -26,6 +26,20 @@ spec:
   storageClassName: local-storage
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sergio-web-log-pv
+  namespace: sergio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /mnt/sergio-web-logs
+  storageClassName: local-storage
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata: 
   name: sergio-web-db-pvc
@@ -37,6 +51,49 @@ spec:
     requests: 
       storage: 2Gi
   storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sergio-web-log-pvc
+  namespace: sergio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: sergio
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: log
+      paths:
+        - /var/log/https___sergio_fernandezcordero_net_production.log
+        - /var/log/https___sergio_fernandezcordero_net_production.error.log
+      json.keys_under_root: true
+      json.overwrite_keys: true
+      json.add_error_key: true
+      json.expand_keys: true
+
+    setup.template.name: "sergio-web"
+    setup.template.pattern: "sergio-web-*"
+    setup.template.settings:
+      index.number_of_shards: 1
+      index.number_of_replicas: 0
+    output.elasticsearch:
+      hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
+      username: ${ELASTICSEARCH_USERNAME}
+      password: ${ELASTICSEARCH_PASSWORD}
+      ssl.verification_mode: none
+      index: "sergio-web-weekly-%{+yyyy.MM.dd}"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -69,14 +126,49 @@ spec:
               value: "true"
             - name:  database__debug
               value: "false"
+            - name: logging__path
+              value: "/var/log/"
+            - name: logging__rotation
+              value: '{"enabled": true, "count: 15, "period": "1d"}'
+            - name: logging__transports
+              value: '["file", "stdout"]'
           volumeMounts:
             - name: sergio-web-db
               mountPath: /var/lib/ghost/content
+            - name: sergio-web-log
+              mountPath: /var/log
+
+        - name: filebeat-sidecar
+          image: docker.elastic.co/beats/filebeat-oss:7.10.2
+          env:
+            - name: ELASTICSEARCH_HOST
+              value: {{ sergio_elk }}
+            - name: ELASTICSEARCH_PORT
+              value: "9200"
+            - name: ELASTICSEARCH_USERNAME
+              value: {{ sergio_elk_user }}
+            - name: ELASTICSEARCH_PASSWORD
+              value: {{ sergio_elk_pass }}
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/filebeat/filebeat.yml
+              readOnly: true
+              subPath: filebeat.yml
+            - name: sergio-web-log
+              mountPath: /var/log
+              readOnly: true
+
       volumes:
         - name: sergio-web-db
           persistentVolumeClaim: 
             claimName: sergio-web-db-pvc
-
+        - name: sergio-web-log
+          persistentVolumeClaim:
+            claimName: sergio-web-log-pvc
+        - name: config
+          configMap:
+            defaultMode: 0640
+            name: filebeat-config
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute

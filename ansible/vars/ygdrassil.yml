@@ -71,6 +71,15 @@ kubernetes_role: "control_plane"
 sergio_url: sergio.fernandezcordero.net
 sergio_scheme: "https"
 sergio_port: "80"
+sergio_elk: "https://opensearch-cluster-master.monitoring.svc.cluster.local"
+sergio_elk_user: sergio-web-appender
+sergio_elk_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61383936346534313233626231363061343766333633396466386632613761633964303435663532
+          6634343739646530623831376365303131373832326361610a663361663336323335373339343263
+          61633265663431663531643838346433626635373434313163646139326566313764663239643364
+          3463343662306532380a393839383433343762623434653164666365376364636536386536336466
+          3631
 
 # PQMC Web 
 pqmc_url: www.proyectopqmc.com
