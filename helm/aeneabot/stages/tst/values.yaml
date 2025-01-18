@@ -6,11 +6,11 @@ ai:
   version: develop
   deployment:
     req:
-      cpu: 500m
-      mem: 512M
+      cpu: 2000m
+      mem: 2Gi
     lim:
-      cpu: 1000m
-      mem: 1Gi
+      cpu: 4000m
+      mem: 6Gi
 # Resources allocation for Aenea Bot container
 bot:
   version: develop
@@ -38,7 +38,7 @@ logLevel: INFO
 # Path to the local SQLite Database
 dbPath: /sqlite
 # Local Cluster path which will be mounted in the container for host the SQLite Database
-localPersistentStoragePath: /opt/aeneabot/aeneadb
+localPersistentStoragePath: /mnt/aeneabot
 ## Ollama AI
 # Ollama Service URL. By default the sidecar one.
 ollamaUrl: http://localhost:11434
