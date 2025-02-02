@@ -204,7 +204,7 @@
     ignore_errors: true
 
   - name: "Define backup schedule in MEGA"
-    shell: 'mega-backup /mnt /ygdrassil/backup --period="0 0 1 * * *" --num-backups=15'
+    shell: 'mega-backup /mnt /ygdrassil/backup --period="0 0 1 * * *" --num-backups=7'
     ignore_errors: true
 
   - name: "Request list backups defined in MEGA"
