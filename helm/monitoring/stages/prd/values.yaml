@@ -57,6 +57,36 @@ prometheus:
           target_label: instance
         - target_label: __address__
           replacement: raponchi-prometheus-svc.raponchi.svc.cluster.local:10090
+# Algo temporal
+secretsExporter:
+  podAnnotations:
+    prometheus.io/port: "9793"
+    prometheus.io/scrape: "true"
+service:
+  create: false
+prometheusServiceMonitor:
+  create: false
+prometheusRules:
+  create: false
+hostPathsExporter:
+  daemonSets:
+    nodes:
+      watchFiles:
+      - /var/lib/kubelet/pki/kubelet-client-current.pem
+      - /etc/kubernetes/pki/apiserver.crt
+      - /etc/kubernetes/pki/apiserver-etcd-client.crt
+      - /etc/kubernetes/pki/apiserver-kubelet-client.crt
+      - /etc/kubernetes/pki/ca.crt
+      - /etc/kubernetes/pki/front-proxy-ca.crt
+      - /etc/kubernetes/pki/front-proxy-client.crt
+      - /etc/kubernetes/pki/etcd/ca.crt
+      - /etc/kubernetes/pki/etcd/healthcheck-client.crt
+      - /etc/kubernetes/pki/etcd/peer.crt
+      - /etc/kubernetes/pki/etcd/server.crt
+      watchKubeconfFiles:
+      - /etc/kubernetes/admin.conf
+      - /etc/kubernetes/controller-manager.conf
+      - /etc/kubernetes/scheduler.conf
 grafana:
   datasources:
     datasources.yaml:
@@ -67,7 +97,28 @@ grafana:
         url: http://monitoring-prometheus-server.monitoring.svc.cluster.local:80
         access: proxy
         isDefault: true
-
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: false
+          options:
+            path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        kubernetes:
+          gnetId: 12740
+          version: 1
+          datasource: Prometheus
+        node_exporter:
+          gnetId: 1860
+          version: 37
+          datasource: Prometheus
 opensearch:
   persistence:
     enabled: true

@@ -59,6 +59,28 @@ grafana:
         url: http://ygdrassil-monitoring-prometheus-server.monitoring.svc.cluster.local:80
         access: proxy
         isDefault: true
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: false
+          options:
+            path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      kubernetes:
+        gnetId: 12740
+        version: 1
+        datasource: Prometheus
+      node_exporter:
+        gnetId: 1860
+        version: 37
+        datasource: Prometheus
 opensearch:
   persistence:
     enabled: true
