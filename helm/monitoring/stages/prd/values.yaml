@@ -57,6 +57,18 @@ prometheus:
           target_label: instance
         - target_label: __address__
           replacement: raponchi-prometheus-svc.raponchi.svc.cluster.local:10090
+    - job_name: 'node-exporter'
+      metrics_path: /metrics
+      static_configs:
+        - targets:
+          - http://95.216.141.244:9100
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: 95.216.141.244:9100
 grafana:
   datasources:
     datasources.yaml:
@@ -79,16 +91,16 @@ grafana:
           editable: false
           options:
             path: /var/lib/grafana/dashboards/default
-    dashboards:
-      default:
-        kubernetes:
-          gnetId: 12740
-          version: 1
-          datasource: Prometheus
-        node_exporter:
-          gnetId: 1860
-          version: 37
-          datasource: Prometheus
+  dashboards:
+    default:
+      kubernetes:
+        gnetId: 12740
+        version: 1
+        datasource: Prometheus
+      node_exporter:
+        gnetId: 1860
+        version: 37
+        datasource: Prometheus
 opensearch:
   persistence:
     enabled: true

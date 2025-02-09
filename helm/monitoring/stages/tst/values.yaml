@@ -49,6 +49,18 @@ prometheus:
           target_label: instance
         - target_label: __address__
           replacement: raponchi-prometheys-svc.raponchi.svc.cluster.local:10090
+    - job_name: 'node-exporter'
+      metrics_path: /metrics
+      static_configs:
+        - targets:
+          - http://95.216.141.244:9100
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: 95.216.141.244:9100
 grafana:
   datasources:
     datasources.yaml:
