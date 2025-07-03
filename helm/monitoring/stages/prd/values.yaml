@@ -5,14 +5,14 @@ appName: ygdrassil-monitoring
 # Decide expose services using TLS or not
 serviceSchema: "https"
 ## Prometheus
-prometheusUrl: prometheus.proyectopqmc.com
+prometheusUrl: prometheus.fernandezcordero.net
 ## Alertmanager
-alertmanagerUrl: alertmanager.proyectopqmc.com
+alertmanagerUrl: alertmanager.fernandezcordero.net
 ## Grafana
-grafanaUrl: grafana.proyectopqmc.com
+grafanaUrl: grafana.fernandezcordero.net
 ## OpenSearch
-opensearchUrl: opensearch.proyectopqmc.com
-opensearchDashboardUrl: dashboard.proyectopqmc.com
+opensearchUrl: opensearch.fernandezcordero.net
+opensearchDashboardUrl: dashboard.fernandezcordero.net
 ## Prometheus Targets
 prometheus:
   alertmanager:
