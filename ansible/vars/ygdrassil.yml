@@ -51,6 +51,7 @@ master_email: "sergio@fernandezcordero.net"
 # Letsencrypt stuff
 ygdrassil_domains:
   - proyectopqmc.com
+  - fernandezcordero.net
 
 # Containerd
 containerd_config_cgroup_driver_systemd: true
@@ -81,7 +82,7 @@ sergio_elk_pass: !vault |
           3463343662306532380a393839383433343762623434653164666365376364636536386536336466
           3631
 
-# PQMC Web 
+# PQMC Web
 pqmc_url: www.proyectopqmc.com
 pqmc_scheme: "https"
 pqmc_port: "80"
