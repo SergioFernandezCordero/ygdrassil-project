@@ -4,8 +4,3 @@
   include_tasks: sergio.yml
   tags:
     - sergio
-
-- name: Deploy PQMC Memorial
-  include_tasks: pqmc.yml
-  tags:
-    - pqmc
