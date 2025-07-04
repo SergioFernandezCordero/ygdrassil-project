@@ -10,7 +10,6 @@ ignorecommand =
 bantime  = 10m
 findtime  = 10m
 maxretry = 5
-4901200
 backend = auto
 usedns = warn
 logencoding = auto
@@ -49,9 +48,8 @@ action = %(action_)s
 #
 
 [sshd]
-
 enabled = true
 port    = ssh
 filter  = sshd
-logpath  = /var/log/auth.log
+backend = systemd
 maxretry = 3
