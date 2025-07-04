@@ -1,5 +1,31 @@
 ---
 - block:
+  - name: "Upgrade APT database"
+    become: yes
+    apt:
+      update-cache: yes
+
+  - name: "Install packages"
+    become: yes
+    package:
+      name:
+        - python3-setuptools
+        - python3-pip
+        - python3-grpcio
+        - python3-yaml
+        - python3-openshift
+        - python3-pyasn1
+        - python3-systemd
+        - rsyslog
+        - fail2ban
+        - apparmor
+      state: present
+
+  tags:
+    - bootstrap
+    - dependencies
+
+- block:
   - name: "Create group for Master User"
     become: yes
     group:
@@ -57,13 +83,24 @@
       line: PermitRootLogin no
     register: disableroot
 
+  - name: "Enable SSH logging for Fail2Ban"
+    become: yes
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '#{{ item }}'
+      line: "{{ item }}"
+    with_items:
+      - "SyslogFacility AUTH"
+      - "LogLevel INFO"
+    register: enableauth
+
   - name: "Restart SSH Service if needed"
     become: yes
     service:
       name: ssh
       state: restarted
       enabled: yes
-    when: disableroot.changed
+    when: disableroot.changed or enableauth.changed
 
   tags:
     - bootstrap
@@ -97,30 +134,6 @@
   tags:
     - bootstrap
     - kernel
-
-- block:
-  - name: "Upgrade APT database"
-    become: yes
-    apt:
-      update-cache: yes
-
-  - name: "Install packages"
-    become: yes
-    package:
-      name:
-        - python3-setuptools
-        - python3-pip
-        - python3-grpcio
-        - python3-yaml
-        - python3-openshift
-        - python3-pyasn1
-        - fail2ban
-        - apparmor
-      state: present
-  
-  tags:
-    - bootstrap
-    - dependencies  
 
 - block:
   - name: "Configure Fail2Ban SSH jail"
