@@ -3,7 +3,6 @@
 appname: aeneabot
 # Resources allocation for Aenea AI container
 ai:
-  version: develop
   deployment:
     req:
       cpu: 2000m
@@ -13,7 +12,6 @@ ai:
       mem: 6Gi
 # Resources allocation for Aenea Bot container
 bot:
-  version: develop
   deployment:
     req:
       cpu: 100m
@@ -30,8 +28,6 @@ securityContext:
 botName: AeneaBot
 # Telegram user allowed to talk with the bot. Any other user will get a "not allowed" response
 authUser: ElAutoestopista
-# Default languange to be used by APIs, when required
-lang: ES
 # Log Level
 logLevel: INFO
 ## Database and Storage
